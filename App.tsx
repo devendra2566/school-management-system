@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, Fragment } from 'react';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import FeesManagement from './components/FeesManagement';
@@ -7,37 +7,14 @@ import NotificationsLog from './components/NotificationsLog';
 import StudentProfile from './components/StudentProfile';
 import TeacherProfile from './components/TeacherProfile';
 import UserManagement from './components/UserManagement';
-import { View, Fee, Salary, Notification, Student, Staff, FeeStatus, SalaryStatus, User, Role } from './types';
+import LoginPage from './components/LoginPage';
+import Header from './components/Header';
+import { View, Fee, Salary, Notification, Student, Staff, FeeStatus, SalaryStatus, User } from './types';
 import { users, students as initialStudents, staff as initialStaff, fees as initialFees, salaries as initialSalaries, initialNotifications } from './data/mockData';
 
-const RoleSwitcher: React.FC<{ currentUser: User; setCurrentUser: (user: User) => void;}> = ({ currentUser, setCurrentUser }) => {
-  const handleRoleChange = (userId: string) => {
-    const newUser = users.find(u => u.id === userId);
-    if(newUser) {
-      setCurrentUser(newUser);
-    }
-  }
-  return (
-    <div className="absolute top-0 right-0 p-4 bg-white bg-opacity-80 rounded-bl-lg shadow-md z-10">
-      <label htmlFor="role-switcher" className="block text-sm font-medium text-gray-700 mr-2">
-        Switch User Role (Demo):
-      </label>
-      <select
-        id="role-switcher"
-        value={currentUser.id}
-        onChange={(e) => handleRoleChange(e.target.value)}
-        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-      >
-        {users.map(user => (
-          <option key={user.id} value={user.id}>{user.name} ({user.role})</option>
-        ))}
-      </select>
-    </div>
-  )
-}
-
 const App: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<User>(users[0]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [activeView, setActiveView] = useState<View>('dashboard');
   const [students] = useState<Student[]>(initialStudents);
   const [staff] = useState<Staff[]>(initialStaff);
@@ -46,7 +23,19 @@ const App: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);
 
-  const handleSetCurrentUser = (user: User) => {
+  const handleLogin = (user: User) => {
+    setCurrentUser(user);
+    setIsLoggedIn(true);
+    setActiveView('dashboard');
+    setSelectedProfileId(null);
+  }
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    setIsLoggedIn(false);
+  }
+
+  const handleSwitchUser = (user: User) => {
     setCurrentUser(user);
     setActiveView('dashboard');
     setSelectedProfileId(null);
@@ -69,8 +58,8 @@ const App: React.FC = () => {
   }, [fees]);
 
   const handlePaySalary = useCallback((salaryId: string) => {
-    setSalaries(prevSalaries => 
-      prevSalaries.map(salary => 
+    setSalaries(prevSalaries =>
+      prevSalaries.map(salary =>
         salary.id === salaryId ? { ...salary, status: SalaryStatus.Paid, paymentDate: new Date().toISOString() } : salary
       )
     );
@@ -82,18 +71,21 @@ const App: React.FC = () => {
   }, []);
 
   const handleSetActiveView = (view: View) => {
-      if (view !== 'studentProfile' && view !== 'teacherProfile') {
-          setSelectedProfileId(null);
-      }
-      if (view === 'studentProfile' && currentUser.role === 'student') {
-          setSelectedProfileId(currentUser.profileId);
-      } else if (view === 'teacherProfile' && currentUser.role === 'teacher') {
-          setSelectedProfileId(currentUser.profileId);
-      }
-      setActiveView(view);
+    if (!currentUser) return;
+    if (view !== 'studentProfile' && view !== 'teacherProfile') {
+      setSelectedProfileId(null);
+    }
+    if (view === 'studentProfile' && currentUser.role === 'student') {
+      setSelectedProfileId(currentUser.profileId);
+    } else if (view === 'teacherProfile' && currentUser.role === 'teacher') {
+      setSelectedProfileId(currentUser.profileId);
+    }
+    setActiveView(view);
   };
 
   const renderView = () => {
+    if (!currentUser) return null;
+
     if ((activeView === 'fees' || activeView === 'salaries' || activeView === 'userManagement') && currentUser.role !== 'admin') {
       return <Dashboard students={students} fees={fees} salaries={salaries} onSelectStudent={handleSelectStudent} currentUser={currentUser} />;
     }
@@ -118,19 +110,25 @@ const App: React.FC = () => {
         return teacher ? <TeacherProfile teacher={teacher} /> : <div className="p-8">Teacher profile not found.</div>;
       }
       case 'userManagement':
-        return <UserManagement />;
+        return <UserManagement students={students} staff={staff} />;
       default:
         return <Dashboard students={students} fees={fees} salaries={salaries} onSelectStudent={handleSelectStudent} currentUser={currentUser} />;
     }
   };
 
+  if (!isLoggedIn || !currentUser) {
+    return <LoginPage onLogin={handleLogin} />;
+  }
+
   return (
     <div className="flex bg-slate-100 min-h-screen">
-      <Sidebar activeView={activeView} setActiveView={handleSetActiveView} notificationCount={notifications.length} currentUser={currentUser}/>
-      <main className="flex-1 relative">
-        <RoleSwitcher currentUser={currentUser} setCurrentUser={handleSetCurrentUser} />
-        {renderView()}
-      </main>
+      <Sidebar activeView={activeView} setActiveView={handleSetActiveView} notificationCount={notifications.length} currentUser={currentUser} />
+      <div className="flex-1 flex flex-col">
+        <Header currentUser={currentUser} onLogout={handleLogout} onSwitchUser={handleSwitchUser} />
+        <main className="flex-1 overflow-y-auto">
+          {renderView()}
+        </main>
+      </div>
     </div>
   );
 };
