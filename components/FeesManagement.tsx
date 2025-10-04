@@ -22,7 +22,13 @@ const FeesManagement: React.FC<FeesManagementProps> = ({ students, fees, onSendR
 
     const feeData = useMemo(() => fees.map(fee => {
         const student = students.find(s => s.id === fee.studentId);
-        return { ...fee, studentName: student?.name, grade: student?.grade, parentName: student?.parentName };
+        return { 
+            ...fee, 
+            studentName: student?.name, 
+            grade: student?.grade, 
+            parentName: student?.parentName,
+            imageUrl: student?.imageUrl
+        };
     }), [fees, students]);
 
     const filteredFeeData = useMemo(() => {
@@ -68,7 +74,7 @@ const FeesManagement: React.FC<FeesManagementProps> = ({ students, fees, onSendR
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Name</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade</th>
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
@@ -79,7 +85,16 @@ const FeesManagement: React.FC<FeesManagementProps> = ({ students, fees, onSendR
                     <tbody className="bg-white divide-y divide-gray-200">
                         {filteredFeeData.map(fee => (
                             <tr key={fee.id}>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{fee.studentName}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="flex items-center">
+                                        <div className="flex-shrink-0 h-10 w-10">
+                                            <img className="h-10 w-10 rounded-full object-cover" src={fee.imageUrl || `https://i.pravatar.cc/150?u=${fee.studentId}`} alt={fee.studentName || 'Student'} />
+                                        </div>
+                                        <div className="ml-4">
+                                            <div className="text-sm font-medium text-gray-900">{fee.studentName}</div>
+                                        </div>
+                                    </div>
+                                </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{fee.grade}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${fee.amount.toFixed(2)}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(fee.dueDate).toLocaleDateString()}</td>

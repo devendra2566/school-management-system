@@ -105,7 +105,7 @@ const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries, current
                     <h3 className="text-lg font-semibold text-gray-700 mb-4">Fee Status Distribution</h3>
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
-                            {/* FIX: Add a fallback for the 'percent' prop to prevent type errors during arithmetic operations. 'percent' can be undefined, so providing '|| 0' ensures it is always a number. */}
+                            {/* FIX: The 'percent' property can be undefined. Added a fallback to 0 to prevent arithmetic errors. */}
                             <Pie data={feeStatusData} cx="50%" cy="50%" labelLine={false} outerRadius={80} fill="#8884d8" dataKey="value" nameKey="name" label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}>
                                 {feeStatusData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                             </Pie>
@@ -116,9 +116,6 @@ const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries, current
                 </div>
             </div>
             
-            {/* FIX: Removed redundant `currentUser.role !== 'student'` check.
-                This part of the component is unreachable for students due to the early return at the top,
-                so TypeScript's control flow analysis correctly identified this condition as always true. */}
               <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
                   <h3 className="text-lg font-semibold text-gray-700 mb-4">Student Overview</h3>
                   <div className="overflow-x-auto">

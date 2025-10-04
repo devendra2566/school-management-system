@@ -75,12 +75,12 @@ export const students: Student[] = [
 ];
 
 export const staff: Staff[] = [
-  { id: 'T01', name: 'Mr. Smith', role: 'Math Teacher', contact: '098-765-4321', classTeacherOfGrade: 7, subjects: ['Math'], baseSalary: 3200, attendancePercentage: 98 },
-  { id: 'T02', name: 'Ms. Jones', role: 'Science Teacher', contact: '098-765-4322', classTeacherOfGrade: 5, subjects: ['Science'], baseSalary: 3400, attendancePercentage: 100 },
-  { id: 'A01', name: 'Mrs. Gable', role: 'Administrator', contact: '098-765-4323', baseSalary: 4000, attendancePercentage: 100 },
-  { id: 'S01', name: 'Mr. Clean', role: 'Janitor', contact: '098-765-4324', baseSalary: 2200, attendancePercentage: 100 },
-  { id: 'D01', name: 'Mr. Drives', role: 'Driver', contact: '098-765-4325', baseSalary: 2500, attendancePercentage: 95 },
-  { id: 'SW01', name: 'Mrs. Sweep', role: 'Sweeper', contact: '098-765-4326', baseSalary: 2100, attendancePercentage: 100 },
+  { id: 'T01', name: 'Mr. Smith', role: 'Math Teacher', contact: '098-765-4321', classTeacherOfGrade: 7, subjects: ['Math'], baseSalary: 3200, attendancePercentage: 98, imageUrl: 'https://i.pravatar.cc/150?u=T01' },
+  { id: 'T02', name: 'Ms. Jones', role: 'Science Teacher', contact: '098-765-4322', classTeacherOfGrade: 5, subjects: ['Science'], baseSalary: 3400, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=T02' },
+  { id: 'A01', name: 'Mrs. Gable', role: 'Administrator', contact: '098-765-4323', baseSalary: 4000, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=A01' },
+  { id: 'S01', name: 'Mr. Clean', role: 'Janitor', contact: '098-765-4324', baseSalary: 2200, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=S01' },
+  { id: 'D01', name: 'Mr. Drives', role: 'Driver', contact: '098-765-4325', baseSalary: 2500, attendancePercentage: 95, imageUrl: 'https://i.pravatar.cc/150?u=D01' },
+  { id: 'SW01', name: 'Mrs. Sweep', role: 'Sweeper', contact: '098-765-4326', baseSalary: 2100, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=SW01' },
 ];
 
 export const fees: Fee[] = [
