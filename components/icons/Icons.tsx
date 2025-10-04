@@ -1,0 +1,38 @@
+import React from 'react';
+
+const iconProps = {
+  className: "w-6 h-6",
+  strokeWidth: 1.5,
+  fill: "none",
+  stroke: "currentColor",
+};
+
+export const DashboardIcon = () => (
+  <svg {...iconProps} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6A2.25 2.25 0 0115.75 3.75h2.25A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25h-2.25a2.25 2.25 0 01-2.25-2.25v-2.25z" />
+  </svg>
+);
+
+export const FeesIcon = () => (
+  <svg {...iconProps} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h6m3-3.75l-3 3m3 0l-3-3m-3.75 6.75h16.5a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15A2.25 2.25 0 002.25 6.75v10.5A2.25 2.25 0 004.5 19.5z" />
+  </svg>
+);
+
+export const SalaryIcon = () => (
+  <svg {...iconProps} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0l.879-.659M7.5 14.25l-2.489-1.867a.75.75 0 01.3-1.382l4.124 2.062a.75.75 0 00.914 0l4.124-2.062a.75.75 0 01.3 1.382L16.5 14.25m-9 3.75l-2.489-1.867a.75.75 0 01.3-1.382l4.124 2.062a.75.75 0 00.914 0l4.124-2.062a.75.75 0 01.3 1.382L16.5 18m-9-3.75l-2.489-1.867a.75.75 0 01.3-1.382l4.124 2.062a.75.75 0 00.914 0l4.124-2.062a.75.75 0 01.3 1.382L16.5 14.25" />
+  </svg>
+);
+
+export const NotificationIcon = () => (
+  <svg {...iconProps} viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+  </svg>
+);
+
+export const SchoolIcon = () => (
+    <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+    </svg>
+);

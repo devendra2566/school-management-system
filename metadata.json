@@ -1,0 +1,5 @@
+{
+  "name": "School Management System",
+  "description": "A comprehensive dashboard for managing school operations including fees, salaries, and parent notifications. This application provides a clear overview of financial health and administrative tasks.",
+  "requestFramePermissions": []
+}

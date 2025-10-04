@@ -1,0 +1,71 @@
+import React from 'react';
+import { Student, Fee, FeeStatus } from '../types';
+import Badge from './ui/Badge';
+
+interface FeesManagementProps {
+  students: Student[];
+  fees: Fee[];
+  onSendReminder: (studentId: string, parentName: string, studentName: string) => void;
+}
+
+const getStatusColor = (status: FeeStatus) => {
+    switch (status) {
+        case FeeStatus.Paid: return 'green';
+        case FeeStatus.Due: return 'yellow';
+        case FeeStatus.Overdue: return 'red';
+        default: return 'blue';
+    }
+};
+
+const FeesManagement: React.FC<FeesManagementProps> = ({ students, fees, onSendReminder }) => {
+    const feeData = fees.map(fee => {
+        const student = students.find(s => s.id === fee.studentId);
+        return { ...fee, studentName: student?.name, grade: student?.grade, parentName: student?.parentName };
+    });
+
+  return (
+    <div className="p-8">
+        <h2 className="text-3xl font-bold text-gray-800 mb-8">Fees Management</h2>
+        <div className="bg-white p-6 rounded-lg shadow-md">
+            <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                        <tr>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Name</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Due Date</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                        {feeData.map(fee => (
+                            <tr key={fee.id}>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{fee.studentName}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{fee.grade}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${fee.amount.toFixed(2)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(fee.dueDate).toLocaleDateString()}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                    <Badge color={getStatusColor(fee.status)}>{fee.status}</Badge>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    { (fee.status === FeeStatus.Due || fee.status === FeeStatus.Overdue) && (
+                                        <button 
+                                            onClick={() => onSendReminder(fee.studentId, fee.parentName!, fee.studentName!)}
+                                            className="text-indigo-600 hover:text-indigo-900 transition duration-150 ease-in-out">
+                                            Send Reminder
+                                        </button>
+                                    )}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+  );
+};
+
+export default FeesManagement;
