@@ -19,6 +19,7 @@ const getStatusColor = (status: FeeStatus) => {
 
 const FeesManagement: React.FC<FeesManagementProps> = ({ students, fees, onSendReminder }) => {
     const [selectedGrade, setSelectedGrade] = useState<number | 'all'>('all');
+    const [searchTerm, setSearchTerm] = useState('');
 
     const feeData = useMemo(() => fees.map(fee => {
         const student = students.find(s => s.id === fee.studentId);
@@ -32,11 +33,24 @@ const FeesManagement: React.FC<FeesManagementProps> = ({ students, fees, onSendR
     }), [fees, students]);
 
     const filteredFeeData = useMemo(() => {
-        if (selectedGrade === 'all') {
-            return feeData;
+        let data = feeData;
+
+        if (selectedGrade !== 'all') {
+            data = data.filter(fee => fee.grade === selectedGrade);
         }
-        return feeData.filter(fee => fee.grade === selectedGrade);
-    }, [feeData, selectedGrade]);
+
+        if (searchTerm) {
+            const lowercasedTerm = searchTerm.toLowerCase();
+            data = data.filter(fee =>
+                fee.studentName?.toLowerCase().includes(lowercasedTerm) ||
+                String(fee.amount).includes(lowercasedTerm) ||
+                fee.status.toLowerCase().includes(lowercasedTerm) ||
+                new Date(fee.dueDate).toLocaleDateString().includes(lowercasedTerm)
+            );
+        }
+
+        return data;
+    }, [feeData, selectedGrade, searchTerm]);
 
     const grades = useMemo(() => [...new Set(students.map(s => s.grade))].sort((a, b) => a - b), [students]);
 
@@ -45,6 +59,13 @@ const FeesManagement: React.FC<FeesManagementProps> = ({ students, fees, onSendR
         <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800">Fees Management</h2>
             <div className="flex items-center space-x-4">
+                 <input
+                    type="text"
+                    placeholder="Search fees..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                />
                 <div className="flex items-center space-x-2">
                     <label htmlFor="grade-filter" className="text-sm font-medium text-gray-700">Filter by Grade:</label>
                     <select 

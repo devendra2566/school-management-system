@@ -1,15 +1,41 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { Student, Staff } from '../types';
 
 interface UserManagementProps {
   students: Student[];
   staff: Staff[];
+  onSelectStudent: (studentId: string) => void;
+  onSelectStaff: (staffId: string) => void;
 }
 
-const UserManagement: React.FC<UserManagementProps> = ({ students, staff }) => {
+const UserManagement: React.FC<UserManagementProps> = ({ students, staff, onSelectStudent, onSelectStaff }) => {
+  const [studentSearch, setStudentSearch] = useState('');
+  const [staffSearch, setStaffSearch] = useState('');
+
   const handleAddUser = (userType: 'Student' | 'Staff') => {
     alert(`'Add ${userType}' functionality is coming soon!`);
   }
+
+  const filteredStudents = useMemo(() => {
+    if (!studentSearch) return students;
+    const lowercasedTerm = studentSearch.toLowerCase();
+    return students.filter(s =>
+      s.name.toLowerCase().includes(lowercasedTerm) ||
+      String(s.grade).includes(lowercasedTerm) ||
+      s.parentName.toLowerCase().includes(lowercasedTerm) ||
+      s.parentContact.includes(lowercasedTerm)
+    );
+  }, [students, studentSearch]);
+
+  const filteredStaff = useMemo(() => {
+    if (!staffSearch) return staff;
+    const lowercasedTerm = staffSearch.toLowerCase();
+    return staff.filter(s =>
+      s.name.toLowerCase().includes(lowercasedTerm) ||
+      s.role.toLowerCase().includes(lowercasedTerm) ||
+      s.contact.includes(lowercasedTerm)
+    );
+  }, [staff, staffSearch]);
 
   return (
     <div className="p-8">
@@ -18,12 +44,21 @@ const UserManagement: React.FC<UserManagementProps> = ({ students, staff }) => {
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold text-gray-700">Students</h3>
-          <button
-            onClick={() => handleAddUser('Student')}
-            className="px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 transition-colors duration-200"
-          >
-            Add Student
-          </button>
+          <div className="flex items-center space-x-4">
+             <input
+                type="text"
+                placeholder="Search students..."
+                value={studentSearch}
+                onChange={(e) => setStudentSearch(e.target.value)}
+                className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            />
+            <button
+              onClick={() => handleAddUser('Student')}
+              className="px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 transition-colors duration-200"
+            >
+              Add Student
+            </button>
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -36,9 +71,18 @@ const UserManagement: React.FC<UserManagementProps> = ({ students, staff }) => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {students.map(student => (
-                <tr key={student.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{student.name}</td>
+              {filteredStudents.map(student => (
+                <tr key={student.id} onClick={() => onSelectStudent(student.id)} className="cursor-pointer hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-10 w-10">
+                        <img className="h-10 w-10 rounded-full object-cover" src={student.imageUrl || `https://i.pravatar.cc/150?u=${student.id}`} alt={student.name} />
+                      </div>
+                      <div className="ml-4">
+                        <div className="text-sm font-medium text-gray-900">{student.name}</div>
+                      </div>
+                    </div>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{student.grade}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{student.parentName}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{student.parentContact}</td>
@@ -52,12 +96,21 @@ const UserManagement: React.FC<UserManagementProps> = ({ students, staff }) => {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold text-gray-700">Staff</h3>
-           <button
-            onClick={() => handleAddUser('Staff')}
-            className="px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 transition-colors duration-200"
-          >
-            Add Staff
-          </button>
+           <div className="flex items-center space-x-4">
+              <input
+                  type="text"
+                  placeholder="Search staff..."
+                  value={staffSearch}
+                  onChange={(e) => setStaffSearch(e.target.value)}
+                  className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+              />
+              <button
+                onClick={() => handleAddUser('Staff')}
+                className="px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 transition-colors duration-200"
+              >
+                Add Staff
+              </button>
+           </div>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -69,9 +122,18 @@ const UserManagement: React.FC<UserManagementProps> = ({ students, staff }) => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {staff.map(member => (
-                <tr key={member.id}>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{member.name}</td>
+              {filteredStaff.map(member => (
+                <tr key={member.id} onClick={() => onSelectStaff(member.id)} className="cursor-pointer hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                        <div className="flex-shrink-0 h-10 w-10">
+                          <img className="h-10 w-10 rounded-full object-cover" src={member.imageUrl || `https://i.pravatar.cc/150?u=${member.id}`} alt={member.name} />
+                        </div>
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">{member.name}</div>
+                        </div>
+                      </div>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.role}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.contact}</td>
                 </tr>

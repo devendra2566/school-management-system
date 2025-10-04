@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { Staff, Salary, SalaryStatus } from '../types';
 import Badge from './ui/Badge';
 
@@ -17,7 +17,9 @@ const getStatusColor = (status: SalaryStatus) => {
 };
 
 const SalaryManagement: React.FC<SalaryManagementProps> = ({ staff, salaries, onPaySalary }) => {
-    const salaryData = salaries.map(salary => {
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const salaryData = useMemo(() => salaries.map(salary => {
         const staffMember = staff.find(s => s.id === salary.staffId);
         return { 
             ...salary, 
@@ -27,11 +29,33 @@ const SalaryManagement: React.FC<SalaryManagementProps> = ({ staff, salaries, on
             attendancePercentage: staffMember?.attendancePercentage,
             imageUrl: staffMember?.imageUrl
         };
-    });
+    }), [salaries, staff]);
+
+    const filteredSalaryData = useMemo(() => {
+        if (!searchTerm) {
+            return salaryData;
+        }
+        const lowercasedTerm = searchTerm.toLowerCase();
+        return salaryData.filter(salary =>
+            salary.staffName?.toLowerCase().includes(lowercasedTerm) ||
+            salary.role?.toLowerCase().includes(lowercasedTerm) ||
+            String(salary.amount).includes(lowercasedTerm) ||
+            salary.status.toLowerCase().includes(lowercasedTerm)
+        );
+    }, [salaryData, searchTerm]);
 
   return (
     <div className="p-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-8">Salary Management</h2>
+        <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-800">Salary Management</h2>
+            <input
+                type="text"
+                placeholder="Search salaries..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="block w-1/3 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            />
+        </div>
         <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -48,7 +72,7 @@ const SalaryManagement: React.FC<SalaryManagementProps> = ({ staff, salaries, on
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {salaryData.map(salary => (
+                        {filteredSalaryData.map(salary => (
                             <tr key={salary.id}>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <div className="flex items-center">

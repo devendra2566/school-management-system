@@ -57,6 +57,9 @@ export interface Staff {
   role: StaffRole;
   contact: string;
   imageUrl?: string;
+  joiningDate: string;
+  dateOfBirth: string;
+  address: string;
   // For teachers
   classTeacherOfGrade?: number;
   subjects?: string[];

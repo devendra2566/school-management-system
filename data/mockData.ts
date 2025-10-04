@@ -75,12 +75,12 @@ export const students: Student[] = [
 ];
 
 export const staff: Staff[] = [
-  { id: 'T01', name: 'Mr. Smith', role: 'Math Teacher', contact: '098-765-4321', classTeacherOfGrade: 7, subjects: ['Math'], baseSalary: 3200, attendancePercentage: 98, imageUrl: 'https://i.pravatar.cc/150?u=T01' },
-  { id: 'T02', name: 'Ms. Jones', role: 'Science Teacher', contact: '098-765-4322', classTeacherOfGrade: 5, subjects: ['Science'], baseSalary: 3400, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=T02' },
-  { id: 'A01', name: 'Mrs. Gable', role: 'Administrator', contact: '098-765-4323', baseSalary: 4000, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=A01' },
-  { id: 'S01', name: 'Mr. Clean', role: 'Janitor', contact: '098-765-4324', baseSalary: 2200, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=S01' },
-  { id: 'D01', name: 'Mr. Drives', role: 'Driver', contact: '098-765-4325', baseSalary: 2500, attendancePercentage: 95, imageUrl: 'https://i.pravatar.cc/150?u=D01' },
-  { id: 'SW01', name: 'Mrs. Sweep', role: 'Sweeper', contact: '098-765-4326', baseSalary: 2100, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=SW01' },
+  { id: 'T01', name: 'Mr. Smith', role: 'Math Teacher', contact: '098-765-4321', classTeacherOfGrade: 7, subjects: ['Math'], baseSalary: 3200, attendancePercentage: 98, imageUrl: 'https://i.pravatar.cc/150?u=T01', joiningDate: '2018-08-15', dateOfBirth: '1985-04-20', address: '321 Elm Street, Springfield' },
+  { id: 'T02', name: 'Ms. Jones', role: 'Science Teacher', contact: '098-765-4322', classTeacherOfGrade: 5, subjects: ['Science'], baseSalary: 3400, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=T02', joiningDate: '2020-01-20', dateOfBirth: '1990-11-12', address: '654 Spruce Way, Springfield' },
+  { id: 'A01', name: 'Mrs. Gable', role: 'Administrator', contact: '098-765-4323', baseSalary: 4000, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=A01', joiningDate: '2015-03-01', dateOfBirth: '1978-07-03', address: '987 Willow Creek, Springfield' },
+  { id: 'S01', name: 'Mr. Clean', role: 'Janitor', contact: '098-765-4324', baseSalary: 2200, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=S01', joiningDate: '2021-09-01', dateOfBirth: '1982-02-28', address: '159 Redwood Path, Springfield' },
+  { id: 'D01', name: 'Mr. Drives', role: 'Driver', contact: '098-765-4325', baseSalary: 2500, attendancePercentage: 95, imageUrl: 'https://i.pravatar.cc/150?u=D01', joiningDate: '2019-07-22', dateOfBirth: '1988-12-19', address: '753 Aspen Court, Springfield' },
+  { id: 'SW01', name: 'Mrs. Sweep', role: 'Sweeper', contact: '098-765-4326', baseSalary: 2100, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=SW01', joiningDate: '2022-02-11', dateOfBirth: '1995-06-08', address: '852 Sequoia Trail, Springfield' },
 ];
 
 export const fees: Fee[] = [

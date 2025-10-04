@@ -70,6 +70,11 @@ const App: React.FC = () => {
     setActiveView('studentProfile');
   }, []);
 
+  const handleSelectStaff = useCallback((staffId: string) => {
+    setSelectedProfileId(staffId);
+    setActiveView('teacherProfile');
+  }, []);
+
   const handleSetActiveView = (view: View) => {
     if (!currentUser) return;
     if (view !== 'studentProfile' && view !== 'teacherProfile') {
@@ -107,10 +112,10 @@ const App: React.FC = () => {
       case 'teacherProfile': {
         const teacherIdToShow = selectedProfileId || (currentUser.role === 'teacher' ? currentUser.profileId : null);
         const teacher = staff.find(s => s.id === teacherIdToShow);
-        return teacher ? <TeacherProfile teacher={teacher} /> : <div className="p-8">Teacher profile not found.</div>;
+        return teacher ? <TeacherProfile teacher={teacher} /> : <div className="p-8">Please select a teacher to view their profile.</div>;
       }
       case 'userManagement':
-        return <UserManagement students={students} staff={staff} />;
+        return <UserManagement students={students} staff={staff} onSelectStudent={handleSelectStudent} onSelectStaff={handleSelectStaff} />;
       default:
         return <Dashboard students={students} fees={fees} salaries={salaries} onSelectStudent={handleSelectStudent} currentUser={currentUser} />;
     }
