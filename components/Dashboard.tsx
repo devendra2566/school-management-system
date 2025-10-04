@@ -1,5 +1,5 @@
 import React from 'react';
-import { Fee, Salary, FeeStatus, SalaryStatus, Student } from '../types';
+import { Fee, Salary, FeeStatus, SalaryStatus, Student, User } from '../types';
 import Card from './ui/Card';
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -7,9 +7,11 @@ interface DashboardProps {
   students: Student[];
   fees: Fee[];
   salaries: Salary[];
+  currentUser: User;
+  onSelectStudent: (studentId: string) => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries }) => {
+const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries, currentUser, onSelectStudent }) => {
     const totalStudents = students.length;
     const feesCollected = fees.filter(f => f.status === FeeStatus.Paid).reduce((sum, f) => sum + f.amount, 0);
     const feesDue = fees.filter(f => f.status === FeeStatus.Due || f.status === FeeStatus.Overdue).reduce((sum, f) => sum + f.amount, 0);
@@ -21,7 +23,7 @@ const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries }) => {
         { name: 'Overdue', value: fees.filter(f => f.status === FeeStatus.Overdue).length },
     ];
     
-    const COLORS = ['#0088FE', '#FFBB28', '#FF8042'];
+    const COLORS = ['#10b981', '#f59e0b', '#ef4444'];
     
     const monthlyData = [
         { name: 'Jan', fees: 4000, salaries: 2400 },
@@ -54,8 +56,8 @@ const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries }) => {
                             <YAxis />
                             <Tooltip />
                             <Legend />
-                            <Bar dataKey="fees" fill="#8884d8" name="Fees Collected" />
-                            <Bar dataKey="salaries" fill="#82ca9d" name="Salaries Paid" />
+                            <Bar dataKey="fees" fill="#4f46e5" name="Fees Collected" />
+                            <Bar dataKey="salaries" fill="#10b981" name="Salaries Paid" />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>
@@ -63,7 +65,8 @@ const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries }) => {
                     <h3 className="text-lg font-semibold text-gray-700 mb-4">Fee Status Distribution</h3>
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
-                            <Pie data={feeStatusData} cx="50%" cy="50%" labelLine={false} outerRadius={80} fill="#8884d8" dataKey="value" nameKey="name" label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}>
+                            {/* FIX: Add a fallback for the 'percent' prop to prevent type errors during arithmetic operations. 'percent' can be undefined, so providing '|| 0' ensures it is always a number. */}
+                            <Pie data={feeStatusData} cx="50%" cy="50%" labelLine={false} outerRadius={80} fill="#8884d8" dataKey="value" nameKey="name" label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}>
                                 {feeStatusData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                             </Pie>
                             <Tooltip />
@@ -72,6 +75,38 @@ const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries }) => {
                     </ResponsiveContainer>
                 </div>
             </div>
+            
+            {currentUser.role !== 'student' && (
+              <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
+                  <h3 className="text-lg font-semibold text-gray-700 mb-4">Student Overview</h3>
+                  <div className="overflow-x-auto">
+                      <table className="min-w-full divide-y divide-gray-200">
+                          <thead className="bg-gray-50">
+                              <tr>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade</th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attendance</th>
+                                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                              </tr>
+                          </thead>
+                          <tbody className="bg-white divide-y divide-gray-200">
+                              {students.map(student => (
+                                  <tr key={student.id}>
+                                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{student.name}</td>
+                                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{student.grade}</td>
+                                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{student.attendance}%</td>
+                                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                          <button onClick={() => onSelectStudent(student.id)} className="text-indigo-600 hover:text-indigo-900">
+                                              View Profile
+                                          </button>
+                                      </td>
+                                  </tr>
+                              ))}
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+            )}
         </div>
     );
 };

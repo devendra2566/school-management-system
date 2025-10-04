@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { Student, Fee, FeeStatus } from '../types';
 import Badge from './ui/Badge';
 
@@ -18,14 +18,41 @@ const getStatusColor = (status: FeeStatus) => {
 };
 
 const FeesManagement: React.FC<FeesManagementProps> = ({ students, fees, onSendReminder }) => {
-    const feeData = fees.map(fee => {
+    const [selectedGrade, setSelectedGrade] = useState<number | 'all'>('all');
+
+    const feeData = useMemo(() => fees.map(fee => {
         const student = students.find(s => s.id === fee.studentId);
         return { ...fee, studentName: student?.name, grade: student?.grade, parentName: student?.parentName };
-    });
+    }), [fees, students]);
+
+    const filteredFeeData = useMemo(() => {
+        if (selectedGrade === 'all') {
+            return feeData;
+        }
+        return feeData.filter(fee => fee.grade === selectedGrade);
+    }, [feeData, selectedGrade]);
+
+    const grades = useMemo(() => [...new Set(students.map(s => s.grade))].sort((a, b) => a - b), [students]);
 
   return (
     <div className="p-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-8">Fees Management</h2>
+        <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-800">Fees Management</h2>
+            <div className="flex items-center space-x-2">
+                <label htmlFor="grade-filter" className="text-sm font-medium text-gray-700">Filter by Grade:</label>
+                <select 
+                    id="grade-filter"
+                    value={selectedGrade}
+                    onChange={(e) => setSelectedGrade(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                >
+                    <option value="all">All Grades</option>
+                    {grades.map(grade => (
+                        <option key={grade} value={grade}>Grade {grade}</option>
+                    ))}
+                </select>
+            </div>
+        </div>
         <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -40,7 +67,7 @@ const FeesManagement: React.FC<FeesManagementProps> = ({ students, fees, onSendR
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {feeData.map(fee => (
+                        {filteredFeeData.map(fee => (
                             <tr key={fee.id}>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{fee.studentName}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{fee.grade}</td>

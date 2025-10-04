@@ -19,7 +19,13 @@ const getStatusColor = (status: SalaryStatus) => {
 const SalaryManagement: React.FC<SalaryManagementProps> = ({ staff, salaries, onPaySalary }) => {
     const salaryData = salaries.map(salary => {
         const staffMember = staff.find(s => s.id === salary.staffId);
-        return { ...salary, staffName: staffMember?.name, role: staffMember?.role };
+        return { 
+            ...salary, 
+            staffName: staffMember?.name, 
+            role: staffMember?.role,
+            baseSalary: staffMember?.baseSalary,
+            attendancePercentage: staffMember?.attendancePercentage
+        };
     });
 
   return (
@@ -32,7 +38,9 @@ const SalaryManagement: React.FC<SalaryManagementProps> = ({ staff, salaries, on
                         <tr>
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Staff Name</th>
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Base Salary</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Attendance</th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payable Amount</th>
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Date</th>
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                             <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
@@ -43,7 +51,9 @@ const SalaryManagement: React.FC<SalaryManagementProps> = ({ staff, salaries, on
                             <tr key={salary.id}>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{salary.staffName}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{salary.role}</td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${salary.amount.toFixed(2)}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${salary.baseSalary?.toFixed(2) ?? 'N/A'}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{salary.attendancePercentage ?? 'N/A'}%</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-700">${salary.amount.toFixed(2)}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(salary.paymentDate).toLocaleDateString()}</td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                                     <Badge color={getStatusColor(salary.status)}>{salary.status}</Badge>

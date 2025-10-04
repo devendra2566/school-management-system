@@ -9,7 +9,24 @@ export enum SalaryStatus {
   Pending = 'Pending',
 }
 
-export type View = 'dashboard' | 'fees' | 'salaries' | 'notifications';
+export type Role = 'admin' | 'teacher' | 'student';
+export type StaffRole = 'Math Teacher' | 'Science Teacher' | 'Administrator' | 'Janitor' | 'Driver' | 'Sweeper';
+
+export type View = 'dashboard' | 'fees' | 'salaries' | 'notifications' | 'studentProfile' | 'teacherProfile' | 'userManagement';
+
+export interface User {
+  id: string;
+  name: string;
+  role: Role;
+  // if student or teacher, this will link to their detailed profile
+  profileId: string;
+}
+
+export interface StudentPerformance {
+  subject: string;
+  marks: number; // out of 100
+  comments: string;
+}
 
 export interface Student {
   id: string;
@@ -18,6 +35,9 @@ export interface Student {
   parentId: string;
   parentName: string;
   parentContact: string;
+  attendance: number; // percentage
+  performance: StudentPerformance[];
+  activities: string[];
 }
 
 export interface Fee {
@@ -31,8 +51,14 @@ export interface Fee {
 export interface Staff {
   id: string;
   name: string;
-  role: string;
+  role: StaffRole;
   contact: string;
+  // For teachers
+  classTeacherOfGrade?: number;
+  subjects?: string[];
+  // For salary calculation
+  baseSalary?: number;
+  attendancePercentage?: number; // monthly
 }
 
 export interface Salary {
