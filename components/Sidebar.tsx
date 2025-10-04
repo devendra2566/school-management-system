@@ -15,7 +15,8 @@ interface SidebarProps {
 const navItems: {
   id: 'dashboard' | 'fees' | 'salaries' | 'userManagement' | 'notifications';
   label: string;
-  icon: JSX.Element;
+  // FIX: Changed type from JSX.Element to React.ReactNode to fix "Cannot find namespace 'JSX'" error.
+  icon: React.ReactNode;
   roles: Role[];
 }[] = [
   { id: 'dashboard', label: 'Dashboard', icon: <DashboardIcon />, roles: ['admin', 'teacher', 'student'] },

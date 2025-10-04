@@ -12,6 +12,46 @@ interface DashboardProps {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries, currentUser, onSelectStudent }) => {
+    
+    if (currentUser.role === 'student') {
+        const student = students.find(s => s.id === currentUser.profileId);
+        if (!student) {
+            return <div className="p-8"><p>Could not find student data.</p></div>;
+        }
+
+        const studentFee = fees.find(f => f.studentId === student.id);
+        const averagePerformance = student.performance.length > 0
+            ? student.performance.reduce((acc, p) => acc + p.marks, 0) / student.performance.length
+            : 0;
+        
+        const feeStatusColor = () => {
+            if (!studentFee) return 'bg-gray-100 text-gray-600';
+            switch(studentFee.status) {
+                case FeeStatus.Paid: return 'bg-green-100 text-green-600';
+                case FeeStatus.Due: return 'bg-yellow-100 text-yellow-600';
+                case FeeStatus.Overdue: return 'bg-red-100 text-red-600';
+                default: return 'bg-gray-100 text-gray-600';
+            }
+        };
+
+        return (
+            <div className="p-8">
+                <h2 className="text-3xl font-bold text-gray-800 mb-8">Welcome, {student.name}!</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <Card title="Attendance" value={`${student.attendance}%`} color={student.attendance >= 90 ? "bg-green-100 text-green-600" : "bg-yellow-100 text-yellow-600"} icon={<CheckBadgeIcon />} />
+                    <Card title="Average Performance" value={`${averagePerformance.toFixed(1)}%`} color="bg-blue-100 text-blue-600" icon={<AcademicCapIcon />} />
+                    <Card title="Fee Status" value={studentFee?.status || 'Up to date'} color={feeStatusColor()} icon={<CreditCardIcon />} />
+                </div>
+                <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
+                  <h3 className="text-lg font-semibold text-gray-700 mb-4">Quick Actions</h3>
+                  <button onClick={() => onSelectStudent(student.id)} className="text-indigo-600 hover:text-indigo-900 font-medium">
+                      View My Full Profile & Performance
+                  </button>
+                </div>
+            </div>
+        );
+    }
+
     const totalStudents = students.length;
     const feesCollected = fees.filter(f => f.status === FeeStatus.Paid).reduce((sum, f) => sum + f.amount, 0);
     const feesDue = fees.filter(f => f.status === FeeStatus.Due || f.status === FeeStatus.Overdue).reduce((sum, f) => sum + f.amount, 0);
@@ -76,7 +116,9 @@ const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries, current
                 </div>
             </div>
             
-            {currentUser.role !== 'student' && (
+            {/* FIX: Removed redundant `currentUser.role !== 'student'` check.
+                This part of the component is unreachable for students due to the early return at the top,
+                so TypeScript's control flow analysis correctly identified this condition as always true. */}
               <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
                   <h3 className="text-lg font-semibold text-gray-700 mb-4">Student Overview</h3>
                   <div className="overflow-x-auto">
@@ -106,7 +148,6 @@ const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries, current
                       </table>
                   </div>
               </div>
-            )}
         </div>
     );
 };
@@ -116,5 +157,8 @@ const UserGroupIcon = () => <svg {...iconProps} fill="none" viewBox="0 0 24 24" 
 const CurrencyDollarIcon = () => <svg {...iconProps} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0l.879-.659M7.5 14.25l-2.489-1.867a.75.75 0 01.3-1.382l4.124 2.062a.75.75 0 00.914 0l4.124-2.062a.75.75 0 01.3 1.382L16.5 14.25" /></svg>;
 const ExclamationTriangleIcon = () => <svg {...iconProps} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>;
 const BanknotesIcon = () => <svg {...iconProps} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.75A.75.75 0 013 4.5h.75m0 0h.75A.75.75 0 015.25 6v.75m0 0v.75A.75.75 0 014.5 8.25h-.75m0 0h.75a.75.75 0 01.75.75v.75m0 0v.75A.75.75 0 014.5 11.25h-.75m0 0h.75a.75.75 0 01.75.75v.75m0 0v.75a.75.75 0 01-.75.75h-.75m0 0H3m1.5-9h16.5a1.5 1.5 0 011.5 1.5v6.75a1.5 1.5 0 01-1.5 1.5H3.75a1.5 1.5 0 01-1.5-1.5V6a1.5 1.5 0 011.5-1.5z" /></svg>;
+const CheckBadgeIcon = () => <svg {...iconProps} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
+const AcademicCapIcon = () => <svg {...iconProps} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 14l9-5-9-5-9 5 9 5z" /><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0v6" /></svg>;
+const CreditCardIcon = () => <svg {...iconProps} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h6m3-3.75l-3 3m3 0l-3-3m-3.75 6.75h16.5a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15A2.25 2.25 0 002.25 6.75v10.5A2.25 2.25 0 004.5 19.5z" /></svg>;
 
 export default Dashboard;

@@ -26,14 +26,25 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ student, fees }) => {
 
   return (
     <div className="p-8">
-      <h2 className="text-3xl font-bold text-gray-800 mb-8">{student.name}'s Profile</h2>
+      <div className="flex items-center space-x-6 bg-white p-6 rounded-lg shadow-md mb-8">
+        <img 
+          src={student.imageUrl || `https://i.pravatar.cc/150?u=${student.id}`}
+          alt={student.name}
+          className="w-32 h-32 rounded-full object-cover border-4 border-sky-200"
+        />
+        <div>
+          <h2 className="text-3xl font-bold text-gray-800">{student.name}</h2>
+          <p className="text-lg text-gray-500">Grade {student.grade}</p>
+        </div>
+      </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1 space-y-6">
           <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">Student Details</h3>
             <div className="space-y-2 text-sm text-gray-600">
-              <p><strong>Grade:</strong> {student.grade}</p>
+              <p><strong>Date of Birth:</strong> {new Date(student.dateOfBirth).toLocaleDateString()}</p>
+              <p><strong>Address:</strong> {student.address}</p>
               <p><strong>Parent:</strong> {student.parentName}</p>
               <p><strong>Contact:</strong> {student.parentContact}</p>
               <p><strong>Attendance:</strong> <span className={`font-bold ${student.attendance >= 90 ? 'text-green-600' : 'text-yellow-600'}`}>{student.attendance}%</span></p>

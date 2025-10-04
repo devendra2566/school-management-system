@@ -38,6 +38,9 @@ export interface Student {
   attendance: number; // percentage
   performance: StudentPerformance[];
   activities: string[];
+  dateOfBirth: string;
+  address: string;
+  imageUrl?: string;
 }
 
 export interface Fee {

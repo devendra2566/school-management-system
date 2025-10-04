@@ -15,7 +15,10 @@ export const students: Student[] = [
       { subject: 'Science', marks: 92, comments: 'Very inquisitive and participates well in labs.' },
       { subject: 'English', marks: 85, comments: 'Good comprehension, needs to work on grammar.' },
     ],
-    activities: ['Chess Club', 'School Choir']
+    activities: ['Chess Club', 'School Choir'],
+    dateOfBirth: '2013-05-15',
+    address: '123 Maple Street, Springfield',
+    imageUrl: 'https://i.pravatar.cc/150?u=S001'
   },
   { 
     id: 'S002', name: 'Bob Williams', grade: 3, parentId: 'P002', parentName: 'Jane Williams', parentContact: '123-456-7891',
@@ -25,7 +28,10 @@ export const students: Student[] = [
       { subject: 'Science', marks: 70, comments: 'Needs to be more attentive during experiments.' },
       { subject: 'English', marks: 80, comments: 'Creative writer.' },
     ],
-    activities: ['Soccer Team']
+    activities: ['Soccer Team'],
+    dateOfBirth: '2015-09-22',
+    address: '456 Oak Avenue, Springfield',
+    imageUrl: 'https://i.pravatar.cc/150?u=S002'
   },
   { 
     id: 'S003', name: 'Charlie Brown', grade: 7, parentId: 'P003', parentName: 'Chris Brown', parentContact: '123-456-7892',
@@ -35,7 +41,10 @@ export const students: Student[] = [
       { subject: 'Science', marks: 98, comments: 'Exceptional scientific aptitude.' },
       { subject: 'English', marks: 91, comments: 'Articulate and well-read.' },
     ],
-    activities: ['Debate Team', 'Student Council']
+    activities: ['Debate Team', 'Student Council'],
+    dateOfBirth: '2011-02-10',
+    address: '789 Pine Lane, Springfield',
+    imageUrl: 'https://i.pravatar.cc/150?u=S003'
   },
   { 
     id: 'S004', name: 'Diana Miller', grade: 5, parentId: 'P004', parentName: 'David Miller', parentContact: '123-456-7893',
@@ -45,7 +54,10 @@ export const students: Student[] = [
       { subject: 'Science', marks: 78, comments: 'Good effort.' },
       { subject: 'English', marks: 88, comments: 'Enjoys reading.' },
     ],
-    activities: ['Art Club']
+    activities: ['Art Club'],
+    dateOfBirth: '2013-07-30',
+    address: '101 Birch Road, Springfield',
+    imageUrl: 'https://i.pravatar.cc/150?u=S004'
   },
   { 
     id: 'S005', name: 'Ethan Davis', grade: 4, parentId: 'P005', parentName: 'Emily Davis', parentContact: '123-456-7894',
@@ -55,7 +67,10 @@ export const students: Student[] = [
         { subject: 'Science', marks: 72, comments: 'Shows interest but needs to study more.' },
         { subject: 'English', marks: 75, comments: 'Average performance.' },
     ],
-    activities: ['Basketball Team']
+    activities: ['Basketball Team'],
+    dateOfBirth: '2014-11-05',
+    address: '212 Cedar Drive, Springfield',
+    imageUrl: 'https://i.pravatar.cc/150?u=S005'
   },
 ];
 
