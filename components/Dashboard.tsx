@@ -1,5 +1,5 @@
 import React from 'react';
-import { Fee, Salary, FeeStatus, SalaryStatus, Student, User } from '../types';
+import { Fee, Salary, FeeStatus, SalaryStatus, Student, User, AttendanceRecord, AttendanceStatus } from '../types';
 import Card from './ui/Card';
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
@@ -7,18 +7,27 @@ interface DashboardProps {
   students: Student[];
   fees: Fee[];
   salaries: Salary[];
+  attendanceRecords: AttendanceRecord[];
   currentUser: User;
   onSelectStudent: (studentId: string) => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries, currentUser, onSelectStudent }) => {
+const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries, attendanceRecords, currentUser, onSelectStudent }) => {
     
+    const calculateAttendance = (studentId: string) => {
+        const studentRecords = attendanceRecords.filter(r => r.studentId === studentId);
+        if (studentRecords.length === 0) return 100;
+        const presentDays = studentRecords.filter(r => r.status === AttendanceStatus.Present).length;
+        return Math.round((presentDays / studentRecords.length) * 100);
+    };
+
     if (currentUser.role === 'student') {
         const student = students.find(s => s.id === currentUser.profileId);
         if (!student) {
             return <div className="p-8"><p>Could not find student data.</p></div>;
         }
-
+        
+        const studentAttendance = calculateAttendance(student.id);
         const studentFee = fees.find(f => f.studentId === student.id);
         const averagePerformance = student.performance.length > 0
             ? student.performance.reduce((acc, p) => acc + p.marks, 0) / student.performance.length
@@ -38,7 +47,7 @@ const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries, current
             <div className="p-8">
                 <h2 className="text-3xl font-bold text-gray-800 mb-8">Welcome, {student.name}!</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <Card title="Attendance" value={`${student.attendance}%`} color={student.attendance >= 90 ? "bg-green-100 text-green-600" : "bg-yellow-100 text-yellow-600"} icon={<CheckBadgeIcon />} />
+                    <Card title="Attendance" value={`${studentAttendance}%`} color={studentAttendance >= 90 ? "bg-green-100 text-green-600" : "bg-yellow-100 text-yellow-600"} icon={<CheckBadgeIcon />} />
                     <Card title="Average Performance" value={`${averagePerformance.toFixed(1)}%`} color="bg-blue-100 text-blue-600" icon={<AcademicCapIcon />} />
                     <Card title="Fee Status" value={studentFee?.status || 'Up to date'} color={feeStatusColor()} icon={<CreditCardIcon />} />
                 </div>
@@ -55,7 +64,7 @@ const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries, current
     const totalStudents = students.length;
     const feesCollected = fees.filter(f => f.status === FeeStatus.Paid).reduce((sum, f) => sum + f.amount, 0);
     const feesDue = fees.filter(f => f.status === FeeStatus.Due || f.status === FeeStatus.Overdue).reduce((sum, f) => sum + f.amount, 0);
-    const salariesPaid = salaries.filter(s => s.status === SalaryStatus.Paid).reduce((sum, s) => sum + s.amount, 0);
+    const salariesPaid = salaries.filter(s => s.status === SalaryStatus.Paid).reduce((sum, s) => sum + s.netSalary, 0);
 
     const feeStatusData = [
         { name: 'Paid', value: fees.filter(f => f.status === FeeStatus.Paid).length },
@@ -105,7 +114,6 @@ const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries, current
                     <h3 className="text-lg font-semibold text-gray-700 mb-4">Fee Status Distribution</h3>
                     <ResponsiveContainer width="100%" height={300}>
                         <PieChart>
-                            {/* FIX: The 'percent' property can be undefined. Added a fallback to 0 to prevent arithmetic errors. */}
                             <Pie data={feeStatusData} cx="50%" cy="50%" labelLine={false} outerRadius={80} fill="#8884d8" dataKey="value" nameKey="name" label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}>
                                 {feeStatusData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                             </Pie>
@@ -133,7 +141,7 @@ const Dashboard: React.FC<DashboardProps> = ({ students, fees, salaries, current
                                   <tr key={student.id}>
                                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{student.name}</td>
                                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{student.grade}</td>
-                                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{student.attendance}%</td>
+                                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{calculateAttendance(student.id)}%</td>
                                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                           <button onClick={() => onSelectStudent(student.id)} className="text-indigo-600 hover:text-indigo-900">
                                               View Profile

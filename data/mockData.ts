@@ -1,15 +1,15 @@
-import { Student, Staff, Fee, Salary, Notification, FeeStatus, SalaryStatus, User } from '../types';
+import { Student, Staff, Fee, Salary, Notification, FeeStatus, SalaryStatus, User, SalaryAdjustment, AttendanceRecord, AttendanceStatus } from '../types';
 
 export const users: User[] = [
   { id: 'U01', name: 'Admin User', role: 'admin', profileId: 'A01' },
   { id: 'U02', name: 'Mr. Smith', role: 'teacher', profileId: 'T01' },
-  { id: 'U03', name: 'Alice Johnson', role: 'student', profileId: 'S001' },
+  { id: 'U03', name: 'Ms. Jones', role: 'teacher', profileId: 'T02' },
+  { id: 'U04', name: 'Alice Johnson', role: 'student', profileId: 'S001' },
 ];
 
 export const students: Student[] = [
   { 
     id: 'S001', name: 'Alice Johnson', grade: 5, parentId: 'P001', parentName: 'John Johnson', parentContact: '123-456-7890',
-    attendance: 95,
     performance: [
       { subject: 'Math', marks: 88, comments: 'Excellent problem-solving skills.' },
       { subject: 'Science', marks: 92, comments: 'Very inquisitive and participates well in labs.' },
@@ -22,7 +22,6 @@ export const students: Student[] = [
   },
   { 
     id: 'S002', name: 'Bob Williams', grade: 3, parentId: 'P002', parentName: 'Jane Williams', parentContact: '123-456-7891',
-    attendance: 88,
     performance: [
       { subject: 'Math', marks: 75, comments: 'Understands concepts but makes careless errors.' },
       { subject: 'Science', marks: 70, comments: 'Needs to be more attentive during experiments.' },
@@ -35,7 +34,6 @@ export const students: Student[] = [
   },
   { 
     id: 'S003', name: 'Charlie Brown', grade: 7, parentId: 'P003', parentName: 'Chris Brown', parentContact: '123-456-7892',
-    attendance: 98,
     performance: [
       { subject: 'Math', marks: 95, comments: 'Top of the class.' },
       { subject: 'Science', marks: 98, comments: 'Exceptional scientific aptitude.' },
@@ -48,7 +46,6 @@ export const students: Student[] = [
   },
   { 
     id: 'S004', name: 'Diana Miller', grade: 5, parentId: 'P004', parentName: 'David Miller', parentContact: '123-456-7893',
-    attendance: 91,
     performance: [
       { subject: 'Math', marks: 82, comments: 'Steady progress.' },
       { subject: 'Science', marks: 78, comments: 'Good effort.' },
@@ -61,7 +58,6 @@ export const students: Student[] = [
   },
   { 
     id: 'S005', name: 'Ethan Davis', grade: 4, parentId: 'P005', parentName: 'Emily Davis', parentContact: '123-456-7894',
-    attendance: 85,
     performance: [
         { subject: 'Math', marks: 68, comments: 'Struggles with geometry.' },
         { subject: 'Science', marks: 72, comments: 'Shows interest but needs to study more.' },
@@ -72,15 +68,75 @@ export const students: Student[] = [
     address: '212 Cedar Drive, Springfield',
     imageUrl: 'https://i.pravatar.cc/150?u=S005'
   },
+  { 
+    id: 'S006', name: 'Frank Green', grade: 7, parentId: 'P006', parentName: 'Fiona Green', parentContact: '123-456-7895',
+    performance: [
+      { subject: 'Math', marks: 85, comments: 'Good analytical skills.' },
+      { subject: 'Science', marks: 88, comments: 'Engages well in practicals.' },
+      { subject: 'English', marks: 82, comments: 'Needs to participate more in discussions.' },
+    ],
+    activities: ['Science Club'],
+    dateOfBirth: '2011-08-12',
+    address: '321 Pine Street, Springfield',
+    imageUrl: 'https://i.pravatar.cc/150?u=S006'
+  },
+  { 
+    id: 'S007', name: 'Grace Hall', grade: 7, parentId: 'P007', parentName: 'George Hall', parentContact: '123-456-7896',
+    performance: [
+      { subject: 'Math', marks: 91, comments: 'Quick learner.' },
+      { subject: 'Science', marks: 94, comments: 'Excellent understanding of concepts.' },
+      { subject: 'English', marks: 89, comments: 'Strong vocabulary.' },
+    ],
+    activities: ['Spelling Bee Champion'],
+    dateOfBirth: '2011-04-25',
+    address: '432 Maple Avenue, Springfield',
+    imageUrl: 'https://i.pravatar.cc/150?u=S007'
+  },
+  { 
+    id: 'S008', name: 'Henry King', grade: 7, parentId: 'P008', parentName: 'Helen King', parentContact: '123-456-7897',
+    performance: [
+      { subject: 'Math', marks: 78, comments: 'Needs to practice more.' },
+      { subject: 'Science', marks: 81, comments: 'Shows curiosity.' },
+      { subject: 'English', marks: 79, comments: 'Improving steadily.' },
+    ],
+    activities: ['School Band'],
+    dateOfBirth: '2011-11-18',
+    address: '543 Oak Lane, Springfield',
+    imageUrl: 'https://i.pravatar.cc/150?u=S008'
+  },
+  { 
+    id: 'S009', name: 'Ivy Lewis', grade: 7, parentId: 'P009', parentName: 'Ian Lewis', parentContact: '123-456-7898',
+    performance: [
+      { subject: 'Math', marks: 88, comments: 'Very consistent.' },
+      { subject: 'Science', marks: 85, comments: 'Good lab work.' },
+      { subject: 'English', marks: 90, comments: 'Excellent writer.' },
+    ],
+    activities: ['Yearbook Committee'],
+    dateOfBirth: '2011-01-30',
+    address: '654 Birch Road, Springfield',
+    imageUrl: 'https://i.pravatar.cc/150?u=S009'
+  },
+  { 
+    id: 'S010', name: 'Jack Martin', grade: 7, parentId: 'P010', parentName: 'Julia Martin', parentContact: '123-456-7899',
+    performance: [
+      { subject: 'Math', marks: 72, comments: 'Finds algebra challenging.' },
+      { subject: 'Science', marks: 75, comments: 'Needs to review notes regularly.' },
+      { subject: 'English', marks: 81, comments: 'Good reader.' },
+    ],
+    activities: ['Drama Club'],
+    dateOfBirth: '2011-06-07',
+    address: '765 Cedar Drive, Springfield',
+    imageUrl: 'https://i.pravatar.cc/150?u=S010'
+  },
 ];
 
 export const staff: Staff[] = [
-  { id: 'T01', name: 'Mr. Smith', role: 'Math Teacher', contact: '098-765-4321', classTeacherOfGrade: 7, subjects: ['Math'], baseSalary: 3200, attendancePercentage: 98, imageUrl: 'https://i.pravatar.cc/150?u=T01', joiningDate: '2018-08-15', dateOfBirth: '1985-04-20', address: '321 Elm Street, Springfield' },
-  { id: 'T02', name: 'Ms. Jones', role: 'Science Teacher', contact: '098-765-4322', classTeacherOfGrade: 5, subjects: ['Science'], baseSalary: 3400, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=T02', joiningDate: '2020-01-20', dateOfBirth: '1990-11-12', address: '654 Spruce Way, Springfield' },
-  { id: 'A01', name: 'Mrs. Gable', role: 'Administrator', contact: '098-765-4323', baseSalary: 4000, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=A01', joiningDate: '2015-03-01', dateOfBirth: '1978-07-03', address: '987 Willow Creek, Springfield' },
-  { id: 'S01', name: 'Mr. Clean', role: 'Janitor', contact: '098-765-4324', baseSalary: 2200, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=S01', joiningDate: '2021-09-01', dateOfBirth: '1982-02-28', address: '159 Redwood Path, Springfield' },
-  { id: 'D01', name: 'Mr. Drives', role: 'Driver', contact: '098-765-4325', baseSalary: 2500, attendancePercentage: 95, imageUrl: 'https://i.pravatar.cc/150?u=D01', joiningDate: '2019-07-22', dateOfBirth: '1988-12-19', address: '753 Aspen Court, Springfield' },
-  { id: 'SW01', name: 'Mrs. Sweep', role: 'Sweeper', contact: '098-765-4326', baseSalary: 2100, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=SW01', joiningDate: '2022-02-11', dateOfBirth: '1995-06-08', address: '852 Sequoia Trail, Springfield' },
+  { id: 'T01', name: 'Mr. Smith', role: 'Math Teacher', contact: '098-765-4321', classTeacherOfGrade: 7, subjects: ['Math'], baseSalary: 3200, attendancePercentage: 98, imageUrl: 'https://i.pravatar.cc/150?u=T01', joiningDate: '2018-08-15', dateOfBirth: '1985-04-20', address: '321 Elm Street, Springfield', allowances: [{ name: 'Transport', amount: 150 }, { name: 'Teaching Aid', amount: 100 }], standardDeductions: [{ name: 'Provident Fund', amount: 250 }] },
+  { id: 'T02', name: 'Ms. Jones', role: 'Science Teacher', contact: '098-765-4322', classTeacherOfGrade: 5, subjects: ['Science'], baseSalary: 3400, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=T02', joiningDate: '2020-01-20', dateOfBirth: '1990-11-12', address: '654 Spruce Way, Springfield', allowances: [{ name: 'Transport', amount: 150 }, { name: 'Lab Maintenance', amount: 120 }], standardDeductions: [{ name: 'Provident Fund', amount: 280 }] },
+  { id: 'A01', name: 'Mrs. Gable', role: 'Administrator', contact: '098-765-4323', baseSalary: 4000, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=A01', joiningDate: '2015-03-01', dateOfBirth: '1978-07-03', address: '987 Willow Creek, Springfield', allowances: [{ name: 'Transport', amount: 200 }, { name: 'Health Insurance', amount: 300 }], standardDeductions: [{ name: 'Provident Fund', amount: 350 }] },
+  { id: 'S01', name: 'Mr. Clean', role: 'Janitor', contact: '098-765-4324', baseSalary: 2200, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=S01', joiningDate: '2021-09-01', dateOfBirth: '1982-02-28', address: '159 Redwood Path, Springfield', allowances: [{ name: 'Transport', amount: 100 }], standardDeductions: [{ name: 'Provident Fund', amount: 150 }] },
+  { id: 'D01', name: 'Mr. Drives', role: 'Driver', contact: '098-765-4325', baseSalary: 2500, attendancePercentage: 95, imageUrl: 'https://i.pravatar.cc/150?u=D01', joiningDate: '2019-07-22', dateOfBirth: '1988-12-19', address: '753 Aspen Court, Springfield', allowances: [{ name: 'Transport', amount: 100 }, { name: 'Vehicle Maint.', amount: 150 }], standardDeductions: [{ name: 'Provident Fund', amount: 180 }] },
+  { id: 'SW01', name: 'Mrs. Sweep', role: 'Sweeper', contact: '098-765-4326', baseSalary: 2100, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=SW01', joiningDate: '2022-02-11', dateOfBirth: '1995-06-08', address: '852 Sequoia Trail, Springfield', allowances: [{ name: 'Transport', amount: 100 }], standardDeductions: [{ name: 'Provident Fund', amount: 140 }] },
 ];
 
 export const fees: Fee[] = [
@@ -89,22 +145,137 @@ export const fees: Fee[] = [
   { id: 'F003', studentId: 'S003', amount: 600, dueDate: '2024-08-25', status: FeeStatus.Due },
   { id: 'F004', studentId: 'S004', amount: 500, dueDate: '2024-08-15', status: FeeStatus.Paid },
   { id: 'F005', studentId: 'S005', amount: 475, dueDate: '2024-08-25', status: FeeStatus.Due },
+  { id: 'F006', studentId: 'S006', amount: 600, dueDate: '2024-08-25', status: FeeStatus.Due },
+  { id: 'F007', studentId: 'S007', amount: 600, dueDate: '2024-08-15', status: FeeStatus.Paid },
+  { id: 'F008', studentId: 'S008', amount: 600, dueDate: '2024-08-25', status: FeeStatus.Due },
+  { id: 'F009', studentId: 'S009', amount: 600, dueDate: '2024-08-10', status: FeeStatus.Overdue },
+  { id: 'F010', studentId: 'S010', amount: 600, dueDate: '2024-08-25', status: FeeStatus.Due },
 ];
 
-const calculateSalary = (staffMember: Staff | undefined): number => {
-    if (!staffMember?.baseSalary || staffMember.attendancePercentage === undefined) return 0;
-    return staffMember.baseSalary * (staffMember.attendancePercentage / 100);
-}
+const generateSalaryRecord = (
+    staffMember: Staff, 
+    oneTimeBonuses: SalaryAdjustment[] = [], 
+    oneTimeDeductions: SalaryAdjustment[] = []
+): Omit<Salary, 'id' | 'staffId' | 'paymentDate' | 'status'> => {
+    if (!staffMember?.baseSalary || staffMember.attendancePercentage === undefined) {
+        return { baseSalary: 0, attendancePercentage: 0, allowances: [], bonuses: [], standardDeductions: [], deductions: [], grossSalary: 0, tax: 0, netSalary: 0 };
+    }
+
+    const baseSalary = staffMember.baseSalary;
+    const attendancePercentage = staffMember.attendancePercentage;
+    const attendanceAdjustedBase = baseSalary * (attendancePercentage / 100);
+
+    const allowances = staffMember.allowances?.map(a => ({ reason: a.name, amount: a.amount })) || [];
+    const standardDeductions = staffMember.standardDeductions?.map(d => ({ reason: d.name, amount: d.amount })) || [];
+
+    const totalAllowances = allowances.reduce((sum, item) => sum + item.amount, 0);
+    const totalBonuses = oneTimeBonuses.reduce((sum, item) => sum + item.amount, 0);
+    const totalStandardDeductions = standardDeductions.reduce((sum, item) => sum + item.amount, 0);
+    const totalDeductions = oneTimeDeductions.reduce((sum, item) => sum + item.amount, 0);
+
+    const grossSalary = attendanceAdjustedBase + totalAllowances + totalBonuses - totalStandardDeductions - totalDeductions;
+    
+    let tax = 0;
+    if (grossSalary > 3000) {
+        tax = (1000 * 0.10) + ((grossSalary - 3000) * 0.15);
+    } else if (grossSalary > 2000) {
+        tax = (grossSalary - 2000) * 0.10;
+    }
+    
+    const netSalary = grossSalary - tax;
+
+    return {
+        baseSalary,
+        attendancePercentage,
+        allowances,
+        bonuses: oneTimeBonuses,
+        standardDeductions,
+        deductions: oneTimeDeductions,
+        grossSalary: parseFloat(grossSalary.toFixed(2)),
+        tax: parseFloat(tax.toFixed(2)),
+        netSalary: parseFloat(netSalary.toFixed(2)),
+    };
+};
+
 
 export const salaries: Salary[] = [
-  { id: 'SAL01', staffId: 'T01', amount: calculateSalary(staff.find(s => s.id === 'T01')), paymentDate: '2024-08-30', status: SalaryStatus.Pending },
-  { id: 'SAL02', staffId: 'T02', amount: calculateSalary(staff.find(s => s.id === 'T02')), paymentDate: '2024-08-30', status: SalaryStatus.Pending },
-  { id: 'SAL03', staffId: 'A01', amount: calculateSalary(staff.find(s => s.id === 'A01')), paymentDate: '2024-07-30', status: SalaryStatus.Paid },
-  { id: 'SAL04', staffId: 'S01', amount: calculateSalary(staff.find(s => s.id === 'S01')), paymentDate: '2024-07-30', status: SalaryStatus.Paid },
-  { id: 'SAL05', staffId: 'D01', amount: calculateSalary(staff.find(s => s.id === 'D01')), paymentDate: '2024-08-30', status: SalaryStatus.Pending },
-  { id: 'SAL06', staffId: 'SW01', amount: calculateSalary(staff.find(s => s.id === 'SW01')), paymentDate: '2024-08-30', status: SalaryStatus.Pending },
+  { 
+    id: 'SAL01', 
+    staffId: 'T01', 
+    ...generateSalaryRecord(staff.find(s => s.id === 'T01')!, [{ reason: 'Performance Bonus', amount: 200 }]),
+    paymentDate: '2024-08-30', 
+    status: SalaryStatus.Pending 
+  },
+  { 
+    id: 'SAL02', 
+    staffId: 'T02', 
+    ...generateSalaryRecord(staff.find(s => s.id === 'T02')!),
+    paymentDate: '2024-08-30', 
+    status: SalaryStatus.Pending 
+  },
+  { 
+    id: 'SAL03', 
+    staffId: 'A01', 
+    ...generateSalaryRecord(staff.find(s => s.id === 'A01')!, [{ reason: 'Overtime', amount: 300 }]),
+    paymentDate: '2024-07-30', 
+    status: SalaryStatus.Paid 
+  },
+  { 
+    id: 'SAL04', 
+    staffId: 'S01', 
+    ...generateSalaryRecord(staff.find(s => s.id === 'S01')!),
+    paymentDate: '2024-07-30', 
+    status: SalaryStatus.Paid 
+  },
+  { 
+    id: 'SAL05', 
+    staffId: 'D01', 
+    ...generateSalaryRecord(staff.find(s => s.id === 'D01')!, [], [{ reason: 'Traffic Fine', amount: 50 }]),
+    paymentDate: '2024-08-30', 
+    status: SalaryStatus.Pending 
+  },
+  { 
+    id: 'SAL06', 
+    staffId: 'SW01', 
+    ...generateSalaryRecord(staff.find(s => s.id === 'SW01')!),
+    paymentDate: '2024-08-30', 
+    status: SalaryStatus.Pending 
+  },
 ];
 
 export const initialNotifications: Notification[] = [
     { id: 'N001', to: 'Jane Williams', studentName: 'Bob Williams', message: 'Fee payment is overdue.', sentAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() }
 ];
+
+// Generate mock attendance data for the last 60 days
+const generateMockAttendance = (allStudents: Student[]): AttendanceRecord[] => {
+    const records: AttendanceRecord[] = [];
+    const today = new Date();
+    const studentIds = allStudents.map(s => s.id);
+    
+    for (let i = 60; i > 0; i--) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+
+        // Skip weekends
+        if (date.getDay() === 0 || date.getDay() === 6) {
+            continue;
+        }
+        
+        const dateString = date.toISOString().split('T')[0];
+
+        studentIds.forEach(studentId => {
+            // Give each student a slightly different attendance rate
+            const isPresent = Math.random() > (0.05 + (parseInt(studentId.slice(2), 10) * 0.01)); 
+            records.push({
+                studentId,
+                date: dateString,
+                status: isPresent ? AttendanceStatus.Present : AttendanceStatus.Absent
+            });
+        });
+    }
+
+    return records;
+};
+
+export const initialAttendanceRecords: AttendanceRecord[] = generateMockAttendance(students);

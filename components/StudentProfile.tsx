@@ -1,11 +1,12 @@
-import React from 'react';
-import { Student, Fee, FeeStatus } from '../types';
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import React, { useMemo } from 'react';
+import { Student, Fee, FeeStatus, AttendanceRecord, AttendanceStatus } from '../types';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Badge from './ui/Badge';
 
 interface StudentProfileProps {
   student: Student;
   fees: Fee[];
+  attendanceRecords: AttendanceRecord[];
 }
 
 const getStatusColor = (status: FeeStatus) => {
@@ -17,12 +18,31 @@ const getStatusColor = (status: FeeStatus) => {
     }
 };
 
-const StudentProfile: React.FC<StudentProfileProps> = ({ student, fees }) => {
-  const performanceData = student.performance.map(p => ({
-    subject: p.subject,
-    marks: p.marks,
-    fullMark: 100,
-  }));
+const StudentProfile: React.FC<StudentProfileProps> = ({ student, fees, attendanceRecords }) => {
+  const studentRecords = useMemo(() => attendanceRecords.filter(r => r.studentId === student.id), [attendanceRecords, student.id]);
+
+  const overallAttendance = useMemo(() => {
+    if (studentRecords.length === 0) return 100;
+    const presentDays = studentRecords.filter(r => r.status === AttendanceStatus.Present).length;
+    return Math.round((presentDays / studentRecords.length) * 100);
+  }, [studentRecords]);
+
+  const monthlyAttendanceData = useMemo(() => {
+    const monthlyData: { [key: string]: { Present: number, Absent: number } } = {};
+    
+    studentRecords.forEach(record => {
+        const month = new Date(record.date).toLocaleString('default', { month: 'short', year: 'numeric' });
+        if (!monthlyData[month]) {
+            monthlyData[month] = { Present: 0, Absent: 0 };
+        }
+        monthlyData[month][record.status]++;
+    });
+
+    return Object.entries(monthlyData).map(([name, counts]) => ({
+        name,
+        ...counts
+    })).reverse(); // Show most recent month first
+  }, [studentRecords]);
 
   return (
     <div className="p-8">
@@ -47,7 +67,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ student, fees }) => {
               <p><strong>Address:</strong> {student.address}</p>
               <p><strong>Parent:</strong> {student.parentName}</p>
               <p><strong>Contact:</strong> {student.parentContact}</p>
-              <p><strong>Attendance:</strong> <span className={`font-bold ${student.attendance >= 90 ? 'text-green-600' : 'text-yellow-600'}`}>{student.attendance}%</span></p>
+              <p><strong>Overall Attendance:</strong> <span className={`font-bold ${overallAttendance >= 90 ? 'text-green-600' : 'text-yellow-600'}`}>{overallAttendance}%</span></p>
             </div>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-md">
@@ -63,7 +83,7 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ student, fees }) => {
                 </ul>
             ) : <p className="text-sm text-gray-500">No fee records found.</p>}
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
+           <div className="bg-white p-6 rounded-lg shadow-md">
             <h3 className="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">Activities</h3>
             {student.activities.length > 0 ? (
                 <ul className="space-y-2 list-disc list-inside text-sm text-gray-600">
@@ -74,23 +94,27 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ student, fees }) => {
         </div>
         
         <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">Academic Performance</h3>
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">Monthly Attendance</h3>
            <ResponsiveContainer width="100%" height={300}>
-            <RadarChart cx="50%" cy="50%" outerRadius="80%" data={performanceData}>
-              <PolarGrid />
-              <PolarAngleAxis dataKey="subject" />
-              <PolarRadiusAxis angle={30} domain={[0, 100]}/>
-              <Radar name={student.name} dataKey="marks" stroke="#4f46e5" fill="#4f46e5" fillOpacity={0.6} />
+            <BarChart data={monthlyAttendanceData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis allowDecimals={false} />
               <Tooltip />
               <Legend />
-            </RadarChart>
+              <Bar dataKey="Present" stackId="a" fill="#10b981" />
+              <Bar dataKey="Absent" stackId="a" fill="#ef4444" />
+            </BarChart>
           </ResponsiveContainer>
           <div className="mt-6">
-            <h4 className="text-md font-semibold text-gray-700 mb-2">Teacher's Comments</h4>
+            <h4 className="text-md font-semibold text-gray-700 mb-2">Academic Performance & Comments</h4>
             <ul className="divide-y divide-gray-200">
                 {student.performance.map(p => (
                     <li key={p.subject} className="py-3">
-                        <p className="text-sm font-medium text-gray-800">{p.subject}</p>
+                        <div className="flex justify-between">
+                            <p className="text-sm font-medium text-gray-800">{p.subject}</p>
+                            <p className="text-sm font-medium text-gray-800">{p.marks}/100</p>
+                        </div>
                         <p className="text-sm text-gray-600 italic">"{p.comments}"</p>
                     </li>
                 ))}

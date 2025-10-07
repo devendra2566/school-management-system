@@ -9,8 +9,9 @@ import TeacherProfile from './components/TeacherProfile';
 import UserManagement from './components/UserManagement';
 import LoginPage from './components/LoginPage';
 import Header from './components/Header';
-import { View, Fee, Salary, Notification, Student, Staff, FeeStatus, SalaryStatus, User } from './types';
-import { users, students as initialStudents, staff as initialStaff, fees as initialFees, salaries as initialSalaries, initialNotifications } from './data/mockData';
+import Attendance from './components/Attendance';
+import { View, Fee, Salary, Notification, Student, Staff, FeeStatus, SalaryStatus, User, AttendanceRecord, AttendanceStatus } from './types';
+import { users, students as initialStudents, staff as initialStaff, fees as initialFees, salaries as initialSalaries, initialNotifications, initialAttendanceRecords } from './data/mockData';
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,6 +22,7 @@ const App: React.FC = () => {
   const [fees, setFees] = useState<Fee[]>(initialFees);
   const [salaries, setSalaries] = useState<Salary[]>(initialSalaries);
   const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
+  const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>(initialAttendanceRecords);
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);
 
   const handleLogin = (user: User) => {
@@ -64,6 +66,28 @@ const App: React.FC = () => {
       )
     );
   }, []);
+  
+  const handleMarkAttendance = useCallback((studentId: string, status: AttendanceStatus) => {
+      const today = new Date().toISOString().split('T')[0];
+      const student = students.find(s => s.id === studentId);
+      if (!student) return;
+
+      // Add attendance record
+      setAttendanceRecords(prev => [...prev, { studentId, date: today, status }]);
+
+      // Send notification to parent
+      const newNotification: Notification = {
+          id: `N${Date.now()}`,
+          to: student.parentName,
+          studentName: student.name,
+          message: `Dear ${student.parentName}, this is to inform you that ${student.name} was marked ${status} at school today, ${new Date().toLocaleDateString()}.`,
+          sentAt: new Date().toISOString(),
+      };
+      setNotifications(prev => [...prev, newNotification]);
+      
+      alert(`Attendance marked for ${student.name}. Parent has been notified.`);
+
+  }, [students]);
 
   const handleSelectStudent = useCallback((studentId: string) => {
     setSelectedProfileId(studentId);
@@ -92,22 +116,37 @@ const App: React.FC = () => {
     if (!currentUser) return null;
 
     if ((activeView === 'fees' || activeView === 'salaries' || activeView === 'userManagement') && currentUser.role !== 'admin') {
-      return <Dashboard students={students} fees={fees} salaries={salaries} onSelectStudent={handleSelectStudent} currentUser={currentUser} />;
+      return <Dashboard students={students} fees={fees} salaries={salaries} attendanceRecords={attendanceRecords} onSelectStudent={handleSelectStudent} currentUser={currentUser} />;
+    }
+     if (activeView === 'attendance' && currentUser.role !== 'teacher') {
+      return <Dashboard students={students} fees={fees} salaries={salaries} attendanceRecords={attendanceRecords} onSelectStudent={handleSelectStudent} currentUser={currentUser} />;
     }
 
     switch (activeView) {
       case 'dashboard':
-        return <Dashboard students={students} fees={fees} salaries={salaries} onSelectStudent={handleSelectStudent} currentUser={currentUser} />;
+        return <Dashboard students={students} fees={fees} salaries={salaries} attendanceRecords={attendanceRecords} onSelectStudent={handleSelectStudent} currentUser={currentUser} />;
       case 'fees':
         return <FeesManagement students={students} fees={fees} onSendReminder={handleSendReminder} />;
       case 'salaries':
         return <SalaryManagement staff={staff} salaries={salaries} onPaySalary={handlePaySalary} />;
       case 'notifications':
         return <NotificationsLog notifications={notifications} />;
+      case 'attendance': {
+        const teacherProfile = staff.find(s => s.id === currentUser.profileId);
+        if (!teacherProfile || !teacherProfile.classTeacherOfGrade) {
+            return <div className="p-8">You are not assigned as a class teacher for any grade.</div>;
+        }
+        return <Attendance 
+          teacher={teacherProfile} 
+          students={students.filter(s => s.grade === teacherProfile.classTeacherOfGrade)} 
+          attendanceRecords={attendanceRecords} 
+          onMarkAttendance={handleMarkAttendance}
+        />
+      }
       case 'studentProfile': {
         const studentIdToShow = selectedProfileId || (currentUser.role === 'student' ? currentUser.profileId : null);
         const student = students.find(s => s.id === studentIdToShow);
-        return student ? <StudentProfile student={student} fees={fees.filter(f => f.studentId === student.id)} /> : <div className="p-8">Please select a student to view their profile.</div>;
+        return student ? <StudentProfile student={student} fees={fees.filter(f => f.studentId === student.id)} attendanceRecords={attendanceRecords} /> : <div className="p-8">Please select a student to view their profile.</div>;
       }
       case 'teacherProfile': {
         const teacherIdToShow = selectedProfileId || (currentUser.role === 'teacher' ? currentUser.profileId : null);
@@ -117,7 +156,7 @@ const App: React.FC = () => {
       case 'userManagement':
         return <UserManagement students={students} staff={staff} onSelectStudent={handleSelectStudent} onSelectStaff={handleSelectStaff} />;
       default:
-        return <Dashboard students={students} fees={fees} salaries={salaries} onSelectStudent={handleSelectStudent} currentUser={currentUser} />;
+        return <Dashboard students={students} fees={fees} salaries={salaries} attendanceRecords={attendanceRecords} onSelectStudent={handleSelectStudent} currentUser={currentUser} />;
     }
   };
 

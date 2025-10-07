@@ -9,10 +9,15 @@ export enum SalaryStatus {
   Pending = 'Pending',
 }
 
+export enum AttendanceStatus {
+  Present = 'Present',
+  Absent = 'Absent',
+}
+
 export type Role = 'admin' | 'teacher' | 'student';
 export type StaffRole = 'Math Teacher' | 'Science Teacher' | 'Administrator' | 'Janitor' | 'Driver' | 'Sweeper';
 
-export type View = 'dashboard' | 'fees' | 'salaries' | 'notifications' | 'studentProfile' | 'teacherProfile' | 'userManagement';
+export type View = 'dashboard' | 'fees' | 'salaries' | 'notifications' | 'studentProfile' | 'teacherProfile' | 'userManagement' | 'attendance';
 
 export interface User {
   id: string;
@@ -35,7 +40,6 @@ export interface Student {
   parentId: string;
   parentName: string;
   parentContact: string;
-  attendance: number; // percentage
   performance: StudentPerformance[];
   activities: string[];
   dateOfBirth: string;
@@ -51,8 +55,18 @@ export interface Fee {
   status: FeeStatus;
 }
 
+export interface Allowance {
+  name: string;
+  amount: number;
+}
+
+export interface StandardDeduction {
+  name: string;
+  amount: number;
+}
+
 export interface Staff {
-  id: string;
+  id:string;
   name: string;
   role: StaffRole;
   contact: string;
@@ -66,15 +80,37 @@ export interface Staff {
   // For salary calculation
   baseSalary?: number;
   attendancePercentage?: number; // monthly
+  allowances?: Allowance[];
+  standardDeductions?: StandardDeduction[];
+}
+
+export interface SalaryAdjustment {
+    reason: string;
+    amount: number;
 }
 
 export interface Salary {
   id: string;
   staffId: string;
-  amount: number;
   paymentDate: string;
   status: SalaryStatus;
+  
+  // Calculation components
+  baseSalary: number; // The original base salary
+  attendancePercentage: number;
+  
+  allowances: SalaryAdjustment[]; // from Staff profile
+  bonuses: SalaryAdjustment[]; // one-time bonuses
+  
+  standardDeductions: SalaryAdjustment[]; // from Staff profile
+  deductions: SalaryAdjustment[]; // one-time deductions
+  
+  // Calculated values
+  grossSalary: number;
+  tax: number;
+  netSalary: number;
 }
+
 
 export interface Notification {
   id: string;
@@ -82,4 +118,10 @@ export interface Notification {
   studentName: string;
   message: string;
   sentAt: string;
+}
+
+export interface AttendanceRecord {
+  studentId: string;
+  date: string; // YYYY-MM-DD
+  status: AttendanceStatus;
 }

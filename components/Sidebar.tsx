@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, User, Role } from '../types';
-import { DashboardIcon, FeesIcon, SalaryIcon, NotificationIcon, SchoolIcon, UsersIcon, UserCircleIcon } from './icons/Icons';
+import { DashboardIcon, FeesIcon, SalaryIcon, NotificationIcon, SchoolIcon, UsersIcon, UserCircleIcon, AttendanceIcon } from './icons/Icons';
 
 interface SidebarProps {
   activeView: View;
@@ -9,19 +9,16 @@ interface SidebarProps {
   currentUser: User;
 }
 
-// FIX: Explicitly type navItems to ensure 'roles' is compatible with the 'Role' type,
-// while keeping 'id' strongly typed. This resolves a type mismatch with Array.prototype.includes
-// caused by using 'as const'.
 const navItems: {
-  id: 'dashboard' | 'fees' | 'salaries' | 'userManagement' | 'notifications';
+  id: 'dashboard' | 'fees' | 'salaries' | 'userManagement' | 'notifications' | 'attendance';
   label: string;
-  // FIX: Changed type from JSX.Element to React.ReactNode to fix "Cannot find namespace 'JSX'" error.
   icon: React.ReactNode;
   roles: Role[];
 }[] = [
   { id: 'dashboard', label: 'Dashboard', icon: <DashboardIcon />, roles: ['admin', 'teacher', 'student'] },
   { id: 'fees', label: 'Fees Management', icon: <FeesIcon />, roles: ['admin'] },
   { id: 'salaries', label: 'Salary Management', icon: <SalaryIcon />, roles: ['admin'] },
+  { id: 'attendance', label: 'Attendance', icon: <AttendanceIcon />, roles: ['teacher'] },
   { id: 'userManagement', label: 'User Management', icon: <UsersIcon />, roles: ['admin'] },
   { id: 'notifications', label: 'Notifications', icon: <NotificationIcon />, roles: ['admin', 'teacher', 'student'] },
 ];
