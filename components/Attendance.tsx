@@ -17,14 +17,17 @@ const Attendance: React.FC<AttendanceProps> = ({ teacher, students, attendanceRe
   };
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
+    <div className="p-4 md:p-8">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-2">
         <div>
             <h2 className="text-3xl font-bold text-gray-800">Take Attendance</h2>
             <p className="text-lg text-gray-500">
-                Class: Grade {teacher.classTeacherOfGrade} | Date: {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                Class: Grade {teacher.classTeacherOfGrade}
             </p>
         </div>
+        <p className="text-md text-gray-600 bg-slate-200 px-3 py-1 rounded-md">
+            Date: {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+        </p>
       </div>
       {students.length === 0 ? (
         <div className="bg-white p-6 rounded-lg shadow-md text-center text-gray-500">

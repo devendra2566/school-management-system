@@ -45,12 +45,12 @@ const StudentProfile: React.FC<StudentProfileProps> = ({ student, fees, attendan
   }, [studentRecords]);
 
   return (
-    <div className="p-8">
-      <div className="flex items-center space-x-6 bg-white p-6 rounded-lg shadow-md mb-8">
+    <div className="p-4 md:p-8">
+      <div className="flex flex-col sm:flex-row items-center sm:space-x-6 bg-white p-6 rounded-lg shadow-md mb-8 text-center sm:text-left">
         <img 
           src={student.imageUrl || `https://i.pravatar.cc/150?u=${student.id}`}
           alt={student.name}
-          className="w-32 h-32 rounded-full object-cover border-4 border-sky-200"
+          className="w-32 h-32 rounded-full object-cover border-4 border-sky-200 mb-4 sm:mb-0"
         />
         <div>
           <h2 className="text-3xl font-bold text-gray-800">{student.name}</h2>

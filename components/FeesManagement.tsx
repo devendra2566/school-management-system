@@ -56,24 +56,24 @@ const FeesManagement: React.FC<FeesManagementProps> = ({ students, fees, onSendR
     const grades = useMemo(() => [...new Set(students.map(s => s.grade))].sort((a, b) => Number(a) - Number(b)), [students]);
 
   return (
-    <div className="p-8">
-        <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-800">Fees Management</h2>
-            <div className="flex items-center space-x-4">
+    <div className="p-4 md:p-8">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
+            <h2 className="text-3xl font-bold text-gray-800 flex-shrink-0">Fees Management</h2>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 w-full">
                  <input
                     type="text"
                     placeholder="Search fees..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                    className="block w-full sm:w-auto flex-grow pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                 />
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 flex-shrink-0">
                     <label htmlFor="grade-filter" className="text-sm font-medium text-gray-700">Filter by Grade:</label>
                     <select 
                         id="grade-filter"
                         value={selectedGrade}
                         onChange={(e) => setSelectedGrade(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                        className="mt-1 block w-auto pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                        className="block w-auto pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                     >
                         <option value="all">All Grades</option>
                         {grades.map(grade => (
@@ -81,14 +81,6 @@ const FeesManagement: React.FC<FeesManagementProps> = ({ students, fees, onSendR
                         ))}
                     </select>
                 </div>
-                {selectedGrade !== 'all' && (
-                    <button
-                        onClick={() => setSelectedGrade('all')}
-                        className="mt-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                        Reset
-                    </button>
-                )}
             </div>
         </div>
         <div className="bg-white p-6 rounded-lg shadow-md">

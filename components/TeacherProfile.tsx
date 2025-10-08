@@ -61,12 +61,12 @@ const TeacherProfile: React.FC<TeacherProfileProps> = ({ teacher, staffAttendanc
   }, [teacher.id, staffAttendance]);
 
   return (
-    <div className="p-8">
-      <div className="flex items-center space-x-6 bg-white p-6 rounded-lg shadow-md mb-8">
+    <div className="p-4 md:p-8">
+      <div className="flex flex-col sm:flex-row items-center sm:space-x-6 bg-white p-6 rounded-lg shadow-md mb-8 text-center sm:text-left">
         <img 
           src={teacher.imageUrl || `https://i.pravatar.cc/150?u=${teacher.id}`}
           alt={teacher.name}
-          className="w-32 h-32 rounded-full object-cover border-4 border-sky-200"
+          className="w-32 h-32 rounded-full object-cover border-4 border-sky-200 mb-4 sm:mb-0"
         />
         <div>
           <h2 className="text-3xl font-bold text-gray-800">{teacher.name}</h2>
@@ -86,7 +86,7 @@ const TeacherProfile: React.FC<TeacherProfileProps> = ({ teacher, staffAttendanc
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">My Attendance</h3>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                     {todaysRecord ? (
                         <p className="text-sm text-gray-600">Today's attendance marked as: <Badge color={todaysRecord.status === StaffAttendanceStatus.Present ? 'green' : 'red'}>{todaysRecord.status}</Badge></p>
                     ) : (
@@ -95,7 +95,7 @@ const TeacherProfile: React.FC<TeacherProfileProps> = ({ teacher, staffAttendanc
                      <button
                         onClick={() => onMarkAttendance(teacher.id, StaffAttendanceStatus.Present)}
                         disabled={!!todaysRecord}
-                        className="px-4 py-2 text-sm font-medium text-white bg-sky-600 rounded-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        className="px-4 py-2 text-sm font-medium text-white bg-sky-600 rounded-md hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:bg-gray-400 disabled:cursor-not-allowed flex-shrink-0"
                     >
                         {todaysRecord ? 'Marked' : "Mark Me Present"}
                     </button>

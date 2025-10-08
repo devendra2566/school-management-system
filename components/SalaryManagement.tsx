@@ -56,7 +56,7 @@ const SalaryDetailModal: React.FC<{
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex justify-center items-center p-4" aria-modal="true" role="dialog">
-            <div className="bg-white rounded-lg shadow-xl w-full max-w-6xl max-h-[90vh] flex flex-col">
+            <div className="bg-white rounded-lg shadow-xl w-full max-w-sm sm:max-w-xl md:max-w-4xl lg:max-w-6xl max-h-[90vh] flex flex-col">
                 <div className="flex justify-between items-center p-4 border-b">
                     <div className="flex items-center space-x-4">
                         <img className="h-16 w-16 rounded-full object-cover" src={staffMember.imageUrl || `https://i.pravatar.cc/150?u=${staffMember.id}`} alt={staffMember.name} />
@@ -166,15 +166,15 @@ const SalaryManagement: React.FC<SalaryManagementProps> = ({ staff, salaries, on
     }, [staff, searchTerm]);
 
   return (
-    <div className="p-8">
-        <div className="flex justify-between items-center mb-8">
+    <div className="p-4 md:p-8">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
             <h2 className="text-3xl font-bold text-gray-800">Salary Management</h2>
             <input
                 type="text"
                 placeholder="Search staff..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="block w-1/3 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                className="block w-full md:w-1/3 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
             />
         </div>
         

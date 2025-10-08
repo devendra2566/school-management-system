@@ -25,6 +25,7 @@ const App: React.FC = () => {
   const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecord[]>(initialAttendanceRecords);
   const [staffAttendance, setStaffAttendance] = useState<StaffAttendanceRecord[]>(initialStaffAttendanceRecords);
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleLogin = (user: User) => {
     setCurrentUser(user);
@@ -124,6 +125,7 @@ const App: React.FC = () => {
       setSelectedProfileId(currentUser.profileId);
     }
     setActiveView(view);
+    setIsSidebarOpen(false); // Close sidebar on navigation
   };
 
   const renderView = () => {
@@ -148,7 +150,7 @@ const App: React.FC = () => {
       case 'attendance': {
         const teacherProfile = staff.find(s => s.id === currentUser.profileId);
         if (!teacherProfile || !teacherProfile.classTeacherOfGrade) {
-            return <div className="p-8">You are not assigned as a class teacher for any grade.</div>;
+            return <div className="p-4 md:p-8">You are not assigned as a class teacher for any grade.</div>;
         }
         return <Attendance 
           teacher={teacherProfile} 
@@ -160,12 +162,12 @@ const App: React.FC = () => {
       case 'studentProfile': {
         const studentIdToShow = selectedProfileId || (currentUser.role === 'student' ? currentUser.profileId : null);
         const student = students.find(s => s.id === studentIdToShow);
-        return student ? <StudentProfile student={student} fees={fees.filter(f => f.studentId === student.id)} attendanceRecords={attendanceRecords} /> : <div className="p-8">Please select a student to view their profile.</div>;
+        return student ? <StudentProfile student={student} fees={fees.filter(f => f.studentId === student.id)} attendanceRecords={attendanceRecords} /> : <div className="p-4 md:p-8">Please select a student to view their profile.</div>;
       }
       case 'teacherProfile': {
         const teacherIdToShow = selectedProfileId || (currentUser.role === 'teacher' ? currentUser.profileId : null);
         const teacher = staff.find(s => s.id === teacherIdToShow);
-        return teacher ? <TeacherProfile teacher={teacher} staffAttendance={staffAttendance} onMarkAttendance={handleMarkStaffAttendance} /> : <div className="p-8">Please select a teacher to view their profile.</div>;
+        return teacher ? <TeacherProfile teacher={teacher} staffAttendance={staffAttendance} onMarkAttendance={handleMarkStaffAttendance} /> : <div className="p-4 md:p-8">Please select a teacher to view their profile.</div>;
       }
       case 'userManagement':
         return <UserManagement students={students} staff={staff} onSelectStudent={handleSelectStudent} onSelectStaff={handleSelectStaff} />;
@@ -180,9 +182,21 @@ const App: React.FC = () => {
 
   return (
     <div className="flex bg-slate-100 min-h-screen">
-      <Sidebar activeView={activeView} setActiveView={handleSetActiveView} notificationCount={notifications.length} currentUser={currentUser} />
-      <div className="flex-1 flex flex-col">
-        <Header currentUser={currentUser} onLogout={handleLogout} onSwitchUser={handleSwitchUser} />
+      <Sidebar 
+        activeView={activeView} 
+        setActiveView={handleSetActiveView} 
+        notificationCount={notifications.length} 
+        currentUser={currentUser} 
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+      />
+      <div className="flex-1 flex flex-col md:pl-64">
+        <Header 
+          currentUser={currentUser} 
+          onLogout={handleLogout} 
+          onSwitchUser={handleSwitchUser} 
+          onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+        />
         <main className="flex-1 overflow-y-auto">
           {renderView()}
         </main>
