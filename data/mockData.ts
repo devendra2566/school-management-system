@@ -1,4 +1,4 @@
-import { Student, Staff, Fee, Salary, Notification, FeeStatus, SalaryStatus, User, SalaryAdjustment, AttendanceRecord, AttendanceStatus } from '../types';
+import { Student, Staff, Fee, Salary, Notification, FeeStatus, SalaryStatus, User, SalaryAdjustment, AttendanceRecord, AttendanceStatus, StaffAttendanceRecord, StaffAttendanceStatus } from '../types';
 
 export const users: User[] = [
   { id: 'U01', name: 'Admin User', role: 'admin', profileId: 'A01' },
@@ -131,12 +131,12 @@ export const students: Student[] = [
 ];
 
 export const staff: Staff[] = [
-  { id: 'T01', name: 'Mr. Smith', role: 'Math Teacher', contact: '098-765-4321', classTeacherOfGrade: 7, subjects: ['Math'], baseSalary: 3200, attendancePercentage: 98, imageUrl: 'https://i.pravatar.cc/150?u=T01', joiningDate: '2018-08-15', dateOfBirth: '1985-04-20', address: '321 Elm Street, Springfield', allowances: [{ name: 'Transport', amount: 150 }, { name: 'Teaching Aid', amount: 100 }], standardDeductions: [{ name: 'Provident Fund', amount: 250 }] },
-  { id: 'T02', name: 'Ms. Jones', role: 'Science Teacher', contact: '098-765-4322', classTeacherOfGrade: 5, subjects: ['Science'], baseSalary: 3400, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=T02', joiningDate: '2020-01-20', dateOfBirth: '1990-11-12', address: '654 Spruce Way, Springfield', allowances: [{ name: 'Transport', amount: 150 }, { name: 'Lab Maintenance', amount: 120 }], standardDeductions: [{ name: 'Provident Fund', amount: 280 }] },
-  { id: 'A01', name: 'Mrs. Gable', role: 'Administrator', contact: '098-765-4323', baseSalary: 4000, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=A01', joiningDate: '2015-03-01', dateOfBirth: '1978-07-03', address: '987 Willow Creek, Springfield', allowances: [{ name: 'Transport', amount: 200 }, { name: 'Health Insurance', amount: 300 }], standardDeductions: [{ name: 'Provident Fund', amount: 350 }] },
-  { id: 'S01', name: 'Mr. Clean', role: 'Janitor', contact: '098-765-4324', baseSalary: 2200, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=S01', joiningDate: '2021-09-01', dateOfBirth: '1982-02-28', address: '159 Redwood Path, Springfield', allowances: [{ name: 'Transport', amount: 100 }], standardDeductions: [{ name: 'Provident Fund', amount: 150 }] },
-  { id: 'D01', name: 'Mr. Drives', role: 'Driver', contact: '098-765-4325', baseSalary: 2500, attendancePercentage: 95, imageUrl: 'https://i.pravatar.cc/150?u=D01', joiningDate: '2019-07-22', dateOfBirth: '1988-12-19', address: '753 Aspen Court, Springfield', allowances: [{ name: 'Transport', amount: 100 }, { name: 'Vehicle Maint.', amount: 150 }], standardDeductions: [{ name: 'Provident Fund', amount: 180 }] },
-  { id: 'SW01', name: 'Mrs. Sweep', role: 'Sweeper', contact: '098-765-4326', baseSalary: 2100, attendancePercentage: 100, imageUrl: 'https://i.pravatar.cc/150?u=SW01', joiningDate: '2022-02-11', dateOfBirth: '1995-06-08', address: '852 Sequoia Trail, Springfield', allowances: [{ name: 'Transport', amount: 100 }], standardDeductions: [{ name: 'Provident Fund', amount: 140 }] },
+  { id: 'T01', name: 'Mr. Smith', role: 'Math Teacher', contact: '098-765-4321', classTeacherOfGrade: 7, subjects: ['Math'], baseSalary: 3200, imageUrl: 'https://i.pravatar.cc/150?u=T01', joiningDate: '2018-08-15', dateOfBirth: '1985-04-20', address: '321 Elm Street, Springfield', allowances: [{ name: 'Transport', amount: 150 }, { name: 'Teaching Aid', amount: 100 }], standardDeductions: [{ name: 'Provident Fund', amount: 250 }] },
+  { id: 'T02', name: 'Ms. Jones', role: 'Science Teacher', contact: '098-765-4322', classTeacherOfGrade: 5, subjects: ['Science'], baseSalary: 3400, imageUrl: 'https://i.pravatar.cc/150?u=T02', joiningDate: '2020-01-20', dateOfBirth: '1990-11-12', address: '654 Spruce Way, Springfield', allowances: [{ name: 'Transport', amount: 150 }, { name: 'Lab Maintenance', amount: 120 }], standardDeductions: [{ name: 'Provident Fund', amount: 280 }] },
+  { id: 'A01', name: 'Mrs. Gable', role: 'Administrator', contact: '098-765-4323', baseSalary: 4000, imageUrl: 'https://i.pravatar.cc/150?u=A01', joiningDate: '2015-03-01', dateOfBirth: '1978-07-03', address: '987 Willow Creek, Springfield', allowances: [{ name: 'Transport', amount: 200 }, { name: 'Health Insurance', amount: 300 }], standardDeductions: [{ name: 'Provident Fund', amount: 350 }] },
+  { id: 'S01', name: 'Mr. Clean', role: 'Janitor', contact: '098-765-4324', baseSalary: 2200, imageUrl: 'https://i.pravatar.cc/150?u=S01', joiningDate: '2021-09-01', dateOfBirth: '1982-02-28', address: '159 Redwood Path, Springfield', allowances: [{ name: 'Transport', amount: 100 }], standardDeductions: [{ name: 'Provident Fund', amount: 150 }] },
+  { id: 'D01', name: 'Mr. Drives', role: 'Driver', contact: '098-765-4325', baseSalary: 2500, imageUrl: 'https://i.pravatar.cc/150?u=D01', joiningDate: '2019-07-22', dateOfBirth: '1988-12-19', address: '753 Aspen Court, Springfield', allowances: [{ name: 'Transport', amount: 100 }, { name: 'Vehicle Maint.', amount: 150 }], standardDeductions: [{ name: 'Provident Fund', amount: 180 }] },
+  { id: 'SW01', name: 'Mrs. Sweep', role: 'Sweeper', contact: '098-765-4326', baseSalary: 2100, imageUrl: 'https://i.pravatar.cc/150?u=SW01', joiningDate: '2022-02-11', dateOfBirth: '1995-06-08', address: '852 Sequoia Trail, Springfield', allowances: [{ name: 'Transport', amount: 100 }], standardDeductions: [{ name: 'Provident Fund', amount: 140 }] },
 ];
 
 export const fees: Fee[] = [
@@ -152,17 +152,43 @@ export const fees: Fee[] = [
   { id: 'F010', studentId: 'S010', amount: 600, dueDate: '2024-08-25', status: FeeStatus.Due },
 ];
 
+const getWorkingDays = (year: number, month: number) => { // month is 1-12
+    const daysInMonth = new Date(year, month, 0).getDate();
+    let workingDays = 0;
+    for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month - 1, day);
+        const dayOfWeek = date.getDay();
+        if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Sunday=0, Saturday=6
+            workingDays++;
+        }
+    }
+    return workingDays;
+}
+
 const generateSalaryRecord = (
-    staffMember: Staff, 
-    oneTimeBonuses: SalaryAdjustment[] = [], 
+    staffMember: Staff,
+    month: number, // 1-12
+    year: number,
+    allAttendance: StaffAttendanceRecord[],
+    oneTimeBonuses: SalaryAdjustment[] = [],
     oneTimeDeductions: SalaryAdjustment[] = []
 ): Omit<Salary, 'id' | 'staffId' | 'paymentDate' | 'status'> => {
-    if (!staffMember?.baseSalary || staffMember.attendancePercentage === undefined) {
+    if (!staffMember?.baseSalary) {
         return { baseSalary: 0, attendancePercentage: 0, allowances: [], bonuses: [], standardDeductions: [], deductions: [], grossSalary: 0, tax: 0, netSalary: 0 };
     }
 
+    const workingDays = getWorkingDays(year, month);
+    const staffAttendanceThisMonth = allAttendance.filter(r => 
+        r.staffId === staffMember.id &&
+        new Date(r.date).getFullYear() === year &&
+        new Date(r.date).getMonth() === month - 1 &&
+        r.status === StaffAttendanceStatus.Present
+    );
+    
+    const presentDays = staffAttendanceThisMonth.length;
+    const attendancePercentage = workingDays > 0 ? Math.round((presentDays / workingDays) * 100) : 100;
+
     const baseSalary = staffMember.baseSalary;
-    const attendancePercentage = staffMember.attendancePercentage;
     const attendanceAdjustedBase = baseSalary * (attendancePercentage / 100);
 
     const allowances = staffMember.allowances?.map(a => ({ reason: a.name, amount: a.amount })) || [];
@@ -197,51 +223,62 @@ const generateSalaryRecord = (
     };
 };
 
+export const generateMockStaffAttendance = (allStaff: Staff[]): StaffAttendanceRecord[] => {
+    const records: StaffAttendanceRecord[] = [];
+    const today = new Date();
+    const staffIds = allStaff.map(s => s.id);
+    
+    for (let i = 365; i > 0; i--) { // 1 year of data
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
 
-export const salaries: Salary[] = [
-  { 
-    id: 'SAL01', 
-    staffId: 'T01', 
-    ...generateSalaryRecord(staff.find(s => s.id === 'T01')!, [{ reason: 'Performance Bonus', amount: 200 }]),
-    paymentDate: '2024-08-30', 
-    status: SalaryStatus.Pending 
-  },
-  { 
-    id: 'SAL02', 
-    staffId: 'T02', 
-    ...generateSalaryRecord(staff.find(s => s.id === 'T02')!),
-    paymentDate: '2024-08-30', 
-    status: SalaryStatus.Pending 
-  },
-  { 
-    id: 'SAL03', 
-    staffId: 'A01', 
-    ...generateSalaryRecord(staff.find(s => s.id === 'A01')!, [{ reason: 'Overtime', amount: 300 }]),
-    paymentDate: '2024-07-30', 
-    status: SalaryStatus.Paid 
-  },
-  { 
-    id: 'SAL04', 
-    staffId: 'S01', 
-    ...generateSalaryRecord(staff.find(s => s.id === 'S01')!),
-    paymentDate: '2024-07-30', 
-    status: SalaryStatus.Paid 
-  },
-  { 
-    id: 'SAL05', 
-    staffId: 'D01', 
-    ...generateSalaryRecord(staff.find(s => s.id === 'D01')!, [], [{ reason: 'Traffic Fine', amount: 50 }]),
-    paymentDate: '2024-08-30', 
-    status: SalaryStatus.Pending 
-  },
-  { 
-    id: 'SAL06', 
-    staffId: 'SW01', 
-    ...generateSalaryRecord(staff.find(s => s.id === 'SW01')!),
-    paymentDate: '2024-08-30', 
-    status: SalaryStatus.Pending 
-  },
-];
+        if (date.getDay() === 0 || date.getDay() === 6) {
+            continue;
+        }
+        
+        const dateString = date.toISOString().split('T')[0];
+
+        staffIds.forEach(staffId => {
+            const isPresent = Math.random() > 0.08; 
+            records.push({
+                staffId,
+                date: dateString,
+                status: isPresent ? StaffAttendanceStatus.Present : StaffAttendanceStatus.Absent
+            });
+        });
+    }
+
+    return records;
+};
+
+export const initialStaffAttendanceRecords: StaffAttendanceRecord[] = generateMockStaffAttendance(staff);
+
+export const salaries: Salary[] = [];
+const processMonths: { year: number; month: number }[] = [];
+const today = new Date();
+for (let i = 11; i >= 0; i--) {
+    const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+    processMonths.push({ year: d.getFullYear(), month: d.getMonth() + 1 });
+}
+
+staff.forEach(staffMember => {
+    processMonths.forEach(({ year, month }) => {
+        const bonuses = Math.random() > 0.7 ? [{ reason: 'Performance Bonus', amount: Math.floor(Math.random() * 200) + 50 }] : [];
+        const deductions = Math.random() > 0.8 ? [{ reason: 'Late Fine', amount: Math.floor(Math.random() * 50) + 20 }] : [];
+        
+        const salaryRecord = generateSalaryRecord(staffMember, month, year, initialStaffAttendanceRecords, bonuses, deductions);
+        
+        if (salaryRecord) {
+             salaries.push({
+                id: `SAL-${staffMember.id}-${year}-${month}`,
+                staffId: staffMember.id,
+                ...salaryRecord,
+                paymentDate: new Date(year, month - 1, 28).toISOString(),
+                status: (year === today.getFullYear() && (month === today.getMonth() + 1)) ? SalaryStatus.Pending : SalaryStatus.Paid,
+            });
+        }
+    });
+});
 
 export const initialNotifications: Notification[] = [
     { id: 'N001', to: 'Jane Williams', studentName: 'Bob Williams', message: 'Fee payment is overdue.', sentAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString() }

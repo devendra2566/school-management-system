@@ -52,7 +52,8 @@ const FeesManagement: React.FC<FeesManagementProps> = ({ students, fees, onSendR
         return data;
     }, [feeData, selectedGrade, searchTerm]);
 
-    const grades = useMemo(() => [...new Set(students.map(s => s.grade))].sort((a, b) => a - b), [students]);
+    // FIX: Explicitly cast sorting values to numbers to resolve TypeScript inference issue.
+    const grades = useMemo(() => [...new Set(students.map(s => s.grade))].sort((a, b) => Number(a) - Number(b)), [students]);
 
   return (
     <div className="p-8">

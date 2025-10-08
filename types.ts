@@ -14,6 +14,12 @@ export enum AttendanceStatus {
   Absent = 'Absent',
 }
 
+export enum StaffAttendanceStatus {
+  Present = 'Present',
+  Absent = 'Absent',
+  OnLeave = 'On Leave'
+}
+
 export type Role = 'admin' | 'teacher' | 'student';
 export type StaffRole = 'Math Teacher' | 'Science Teacher' | 'Administrator' | 'Janitor' | 'Driver' | 'Sweeper';
 
@@ -79,7 +85,6 @@ export interface Staff {
   subjects?: string[];
   // For salary calculation
   baseSalary?: number;
-  attendancePercentage?: number; // monthly
   allowances?: Allowance[];
   standardDeductions?: StandardDeduction[];
 }
@@ -124,4 +129,10 @@ export interface AttendanceRecord {
   studentId: string;
   date: string; // YYYY-MM-DD
   status: AttendanceStatus;
+}
+
+export interface StaffAttendanceRecord {
+  staffId: string;
+  date: string; // YYYY-MM-DD
+  status: StaffAttendanceStatus;
 }
